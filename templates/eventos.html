@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $.get("http://127.0.0.1:5000/api/v1/events_meetup", { "groups_meetup": JSON.stringify(['Dublin-UX', 'django-dublin'])},
+                function(data, status){
+                    $('#teste').html(data.html);
+        });
+    });
+});
+</script>
+</head>
+<body>
+<button>Send an HTTP POST request to a page and get the result back</button>
+
+<div id="teste" style="width: 50%">
+    aaaaaaaaaaaaa
+</div>
+<iframe id="aqui" width="100%" height="500px;"/>
+</body>
+</html>

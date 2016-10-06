@@ -1,0 +1,3 @@
+flask-restful
+flask-cors==2.1.2
+slumber==0.7.1
