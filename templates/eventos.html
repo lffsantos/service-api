@@ -5,7 +5,7 @@
 <script>
 $(document).ready(function(){
     $("button").click(function(){
-        $.get("http://127.0.0.1:5000/api/v1/events_meetup", { "groups_meetup": JSON.stringify(['Dublin-UX', 'django-dublin'])},
+        $.get("https://itindublin-service-api.herokuapp.com/api/v1/events_meetup", { "groups_meetup": JSON.stringify(['Dublin-UX', 'django-dublin'])},
                 function(data, status){
                     $('#teste').html(data.html);
         });
