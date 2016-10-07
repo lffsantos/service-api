@@ -6,6 +6,7 @@ api_v1 = Api(app, prefix='/api/v1')
 
 # then import views which use the blueprint
 from service.events import views
+from service import views
 
 
 @app.after_request
