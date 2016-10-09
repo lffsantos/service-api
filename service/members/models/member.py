@@ -24,7 +24,9 @@ class Member(db.Model):
     ]
     EXPERIENCE_TIME = [
         (1, u'Sem experiência'),
-        (2, u' < 1 ano')
+        (2, u' < 1 ano'),
+        (3, u' 1 - 2 anos'),
+        (4, u' 2 - 4 anos')
     ]
 
     id = db.Column(db.Integer, primary_key=True)
