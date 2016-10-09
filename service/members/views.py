@@ -4,14 +4,14 @@ from service import api_v1
 from service.members.models import Member
 from itsdangerous import BadSignature
 from itsdangerous import URLSafeSerializer as Serializer
+from service.members.queries import get_members
 
 
 @api_v1.route("/members", methods=['GET'])
 def members():
-    payload = request.get_json()
     # TODO: apply filter later
-    result = {'members': Member.query.all()}
-    return jsonify(result), 200
+    payload = request.get_json()
+    return jsonify({'members': get_members()}), 200
 
 
 @api_v1.route("/member/create", methods=['POST'])

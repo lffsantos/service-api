@@ -1,5 +1,5 @@
+import time
 from datetime import datetime
-from flask.ext.admin.contrib import sqlamodel
 
 from service import db
 from sqlalchemy.orm import backref
@@ -56,8 +56,8 @@ class Member(db.Model):
         """
         return [tech.serialize for tech in self.technologies]
 
+    def age(self):
+        return time.gmtime()[0] - self.birth.year
+
     def __repr__(self):
         return self.full_name
-
-
-

@@ -1,4 +1,5 @@
 from flask.json import JSONEncoder
+from service.members.models import Member
 
 
 def dump_datetime(value):
@@ -17,14 +18,13 @@ def dump_choice(value):
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
-        from service.members.models import Member
         if isinstance(obj, Member):
             return {
                 'id': obj.id,
                 'gender': dump_choice(obj.gender),
                 'full_name': obj.full_name,
                 'short_name': obj.short_name,
-                'birth': dump_datetime(obj.birth),
+                'birth': obj.age(),
                 'email': obj.email,
                 'about': obj.about,
                 'confirmed': obj.confirmed,
