@@ -10,7 +10,7 @@ class Education(db.Model):
     __tablename__ = 'education'
 
     id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.String, unique=True)
+    level = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='education', lazy='dynamic')
 
     def __repr__(self):
@@ -21,7 +21,7 @@ class Course(db.Model):
     __tablename__ = 'course'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='course', lazy='dynamic')
 
     def __repr__(self):
@@ -32,7 +32,7 @@ class Visa(db.Model):
     __tablename__ = 'visa'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+    name = db.Column(db.String, unique=True, nullable=False)
     description = db.Column(db.Text)
     members = db.relationship('Member', backref='visa', lazy='dynamic')
 
@@ -44,7 +44,7 @@ class OcupationArea(db.Model):
     __tablename__ = 'ocupation_area'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='ocupation_area', lazy='dynamic')
 
     def __repr__(self):
@@ -55,7 +55,7 @@ class Technology(db.Model):
     __tablename__ = 'technology'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+    name = db.Column(db.String, unique=True, nullable=False)
 
     def __repr__(self):
         return self.name
@@ -83,10 +83,10 @@ class Member(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     gender = db.Column(ChoiceType(GENDER), nullable=False)
-    full_name = db.Column(db.String, unique=True)
+    full_name = db.Column(db.String, unique=True, nullable=False)
     short_name = db.Column(db.String)
     birth = db.Column(db.Date)
-    email = db.Column(db.String, unique=True)
+    email = db.Column(db.String, unique=True, nullable=False)
     about = db.Column(db.Text)
     confirmed = db.Column(db.Boolean, default=False)
     update_at = db.Column(db.DateTime, default=datetime.now())
@@ -99,7 +99,7 @@ class Member(db.Model):
     visa_id = db.Column(db.Integer, db.ForeignKey('visa.id'))
     ocupation_area_id = db.Column(db.Integer, db.ForeignKey('ocupation_area.id'))
     technologies = db.relationship(
-        'Technology', secondary=member_technology, backref=backref('member', lazy='dynamic')
+        'Technology', secondary=member_technology, backref=backref('members', lazy='dynamic')
     )
     is_work = db.Column(db.Boolean)
 

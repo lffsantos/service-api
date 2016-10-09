@@ -28,13 +28,14 @@ cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 # Admin
 from service.members.db.models import Member, Education, Visa, OcupationArea, Technology, Course, MemberAdmin
 
-admin = Admin(app, name='service-api', template_mode='bootstrap3')
-admin.add_view(MemberAdmin(Member, db.session))
-admin.add_view(ModelView(Education, db.session))
-admin.add_view(ModelView(Visa, db.session))
-admin.add_view(ModelView(OcupationArea, db.session))
-admin.add_view(ModelView(Technology, db.session))
-admin.add_view(ModelView(Course, db.session))
+if config('DEBUG', default=False, cast=bool):
+    admin = Admin(app, name='service-api', template_mode='bootstrap3')
+    admin.add_view(MemberAdmin(Member, db.session))
+    admin.add_view(ModelView(Education, db.session))
+    admin.add_view(ModelView(Visa, db.session))
+    admin.add_view(ModelView(OcupationArea, db.session))
+    admin.add_view(ModelView(Technology, db.session))
+    admin.add_view(ModelView(Course, db.session))
 
 
 @app.after_request
