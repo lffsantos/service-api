@@ -26,7 +26,7 @@ app.register_blueprint(api_v1, url_prefix='/api/v1')
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 # Admin
-from service.members.db.models import Member, Education, Visa, OcupationArea, Technology, Course, MemberAdmin
+from service.members.models import Member, Education, Visa, OcupationArea, Technology, Course, MemberAdmin
 
 if config('DEBUG', default=False, cast=bool):
     admin = Admin(app, name='service-api', template_mode='bootstrap3')
