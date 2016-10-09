@@ -10,3 +10,4 @@ sqlalchemy-utils
 python-decouple==3.0
 flask-admin==1.4.2
 itsdangerous==0.24
+flask-validator

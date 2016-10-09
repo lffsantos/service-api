@@ -59,7 +59,7 @@ def test_save_member(session, test_case):
         del database['members']
     gen.insert_database(session, database)
     member = Member(
-        full_name='Lucas Farias', gender='male', short_name='Lucas', birth=date.today(),
+        full_name='Lucas Farias', gender=1, short_name='Lucas', birth=date.today(),
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
         occupation_area_id=1
     )
