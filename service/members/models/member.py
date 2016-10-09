@@ -46,7 +46,7 @@ class Member(db.Model):
     technologies = db.relationship(
         'Technology', secondary=member_technology, backref=backref('members', lazy='dynamic')
     )
-    is_work = db.Column(db.Boolean)
+    is_working = db.Column(db.Boolean)
 
     @property
     def serialize_technologies(self):

@@ -60,7 +60,7 @@ def test_save_member(session, test_case):
     gen.insert_database(session, database)
     member = Member(
         full_name='Lucas Farias', gender='male', short_name='Lucas', birth=date.today(),
-        email='example@gmail.com', is_work=False, visa_id=1, education_id=1, course_id=1,
+        email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
         occupation_area_id=1
     )
     session.add(member)
@@ -92,12 +92,12 @@ def test_edit_member(session, test_case):
         else:
             assert result.__dict__[key] == value
 
-    result.is_work = True
+    result.is_working = True
     technology_3 = test_case['database']['technologies'][2]
     result.technologies.remove(technology_3)
     session.commit()
     member = Member.query.all()[0]
-    assert member.is_work
+    assert member.is_working
     assert len(member.technologies) == 3
     assert technology_3 not in member.technologies
 

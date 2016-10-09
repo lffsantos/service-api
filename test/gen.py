@@ -34,7 +34,7 @@ def fake_data():
             'members': [
                 Member(
                     full_name='Lucas Farias', gender='male', short_name='Lucas', birth=date.today(),
-                    email='example@gmail.com', is_work=False, visa_id=1, education_id=1, course_id=1,
+                    email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
                     occupation_area_id=1
                 )
             ]
@@ -43,7 +43,7 @@ def fake_data():
             'full_name': 'Lucas Farias', 'gender': 'male', 'short_name': 'Lucas',
             'birth': date.today(), 'email': 'example@gmail.com',
             'education_id': 1, 'course_id': 1, 'visa_id': 1, 'occupation_area_id': 1,
-            'is_work': False,
+            'is_working': False,
             'technologies': ['Java', 'Python', 'Django', 'Flask'],
         },
     }

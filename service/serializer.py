@@ -37,7 +37,7 @@ class MyJSONEncoder(JSONEncoder):
                 'visa': obj.visa.serialize,
                 'occupation_area': obj.occupation_area.serialize,
                 'technologies': obj.serialize_technologies,
-                'is_work': obj.is_work,
+                'is_working': obj.is_working,
             }
 
         return super(MyJSONEncoder, self).default(obj)
