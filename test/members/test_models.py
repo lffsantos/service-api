@@ -2,14 +2,14 @@ import copy
 import pytest
 
 from datetime import date
-from service import Education, Visa, OcupationArea, Technology, Course, Member
+from service import Education, Visa, OccupationArea, Technology, Course, Member
 from test import gen
 
 
 @pytest.mark.parametrize('test_case', [
     (Education(level='Superior')),
     (Visa(name='Stamp2', description='Estudante')),
-    (OcupationArea(name='Devops')),
+    (OccupationArea(name='Devops')),
     (Technology(name='Java')),
     (Course(name='Engenharia'))
 ])
@@ -22,7 +22,7 @@ def test_create(session, test_case):
 @pytest.mark.parametrize('test_case, attribute, expected', [
     (Education(level='Superior'), 'level', 'doutorado'),
     (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4' ),
-    (OcupationArea(name='Devops'), 'name', 'backend'),
+    (OccupationArea(name='Devops'), 'name', 'backend'),
     (Technology(name='Java'), 'name', 'python'),
     (Course(name='Engenharia'), 'name', 'Ciencia')
 ])
@@ -39,7 +39,7 @@ def test_edit(session, test_case, attribute, expected):
 @pytest.mark.parametrize('test_case', [
     (Education(level='Superior')),
     (Visa(name='Stamp2', description='Estudante')),
-    (OcupationArea(name='Devops')),
+    (OccupationArea(name='Devops')),
     (Technology(name='Java')),
     (Course(name='Engenharia'))
 ])
@@ -61,7 +61,7 @@ def test_save_member(session, test_case):
     member = Member(
         full_name='Lucas Farias', gender='male', short_name='Lucas', birth=date.today(),
         email='example@gmail.com', is_work=False, visa_id=1, education_id=1, course_id=1,
-        ocupation_area_id=1
+        occupation_area_id=1
     )
     session.add(member)
     session.commit()

@@ -13,6 +13,13 @@ class Education(db.Model):
     level = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='education', lazy='dynamic')
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'level': self.level,
+        }
+
     def __repr__(self):
         return self.level
 
@@ -23,6 +30,13 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='course', lazy='dynamic')
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
 
     def __repr__(self):
         return self.name
@@ -36,16 +50,31 @@ class Visa(db.Model):
     description = db.Column(db.Text)
     members = db.relationship('Member', backref='visa', lazy='dynamic')
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+        }
+
     def __repr__(self):
         return self.name
 
 
-class OcupationArea(db.Model):
-    __tablename__ = 'ocupation_area'
+class OccupationArea(db.Model):
+    __tablename__ = 'occupation_area'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
-    members = db.relationship('Member', backref='ocupation_area', lazy='dynamic')
+    members = db.relationship('Member', backref='occupation_area', lazy='dynamic')
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
 
     def __repr__(self):
         return self.name
@@ -56,6 +85,13 @@ class Technology(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
 
     def __repr__(self):
         return self.name
@@ -76,10 +112,10 @@ class Member(db.Model):
         (u'male', u'Male'),
         (u'female', u'Female')
     ]
-    EXPERIENCE_TIME = (
+    EXPERIENCE_TIME = [
         ('0', u'Sem experiência'),
         ('1', u' < 1 ano')
-    )
+    ]
 
     id = db.Column(db.Integer, primary_key=True)
     gender = db.Column(ChoiceType(GENDER), nullable=False)
@@ -97,11 +133,19 @@ class Member(db.Model):
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
     visa_id = db.Column(db.Integer, db.ForeignKey('visa.id'))
-    ocupation_area_id = db.Column(db.Integer, db.ForeignKey('ocupation_area.id'))
+    occupation_area_id = db.Column(db.Integer, db.ForeignKey('occupation_area.id'))
     technologies = db.relationship(
         'Technology', secondary=member_technology, backref=backref('members', lazy='dynamic')
     )
     is_work = db.Column(db.Boolean)
+
+    @property
+    def serialize_technologies(self):
+        """
+        Return object's relations in easily serializeable format.
+        Calls many2many's serialize property.
+        """
+        return [tech.serialize for tech in self.technologies]
 
     def __repr__(self):
         return self.full_name

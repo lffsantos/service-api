@@ -9,7 +9,7 @@ TESTDB_PATH = "/tmp/{}".format(TESTDB)
 TEST_DATABASE_URI = 'sqlite:////tmp/test_project.db'
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def app(request):
     """Session-wide test `Flask` application."""
     app = service.app
