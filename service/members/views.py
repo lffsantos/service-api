@@ -10,10 +10,8 @@ from itsdangerous import URLSafeSerializer as Serializer
 def members():
     payload = request.get_json()
     # TODO: apply filter later
-    members = Member.query.all()
-    # members = [m.serialize for m in members]
-    xx = jsonify(members)
-    return jsonify(members), 200
+    result = {'members': Member.query.all()}
+    return jsonify(result), 200
 
 
 @api_v1.route("/member/create", methods=['POST'])

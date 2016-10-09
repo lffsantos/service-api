@@ -1,6 +1,5 @@
 import os
 import pytest
-from service import db as _db
 import service
 
 TESTDB = 'test_project.db'
@@ -31,14 +30,14 @@ def db(app, request):
         os.unlink(TESTDB_PATH)
 
     def teardown():
-        _db.drop_all()
+        service.db.drop_all()
         os.unlink(TESTDB_PATH)
 
-    _db.app = app
-    _db.create_all()
+    service.db.app = app
+    service.db.create_all()
 
     request.addfinalizer(teardown)
-    return _db
+    return service.db
 
 
 @pytest.fixture(scope='function')

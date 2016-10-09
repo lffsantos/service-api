@@ -1,7 +1,15 @@
+from flask.ext.admin.contrib import sqlamodel
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin import Admin
 from service import app, db
 from service.members.models import Member, Education, Visa, OccupationArea, Technology, Course, MemberAdmin
+
+
+class MemberAdmin(sqlamodel.ModelView):
+    form_choices = {
+        'gender': Member.GENDER,
+        'experience_time': Member.EXPERIENCE_TIME
+    }
 
 
 def init_admin():

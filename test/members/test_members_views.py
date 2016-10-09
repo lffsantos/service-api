@@ -1,5 +1,6 @@
+import json
 import pytest
-from flask import url_for
+from flask import url_for, jsonify
 from service.members.models import Member
 from test import gen
 
@@ -12,6 +13,7 @@ def test_members(client, session, test_case):
         member.technologies.append(tech)
     session.commit()
     response = client.get(url_for('api_v1.members'))
-
+    members = Member.query.all()
+    assert response.json == jsonify({'members': members}).json
     assert response.status_code == 200
 
