@@ -1,5 +1,5 @@
 from datetime import date
-from service import Education, Course, Visa, OccupationArea, Technology, Member
+from service.members.models import Education, Course, Visa, OccupationArea, Technology, Member
 
 __author__ = 'lucas'
 

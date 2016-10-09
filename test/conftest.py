@@ -1,7 +1,6 @@
-from flask import Flask
 import os
 import pytest
-from service import app,  db as _db
+from service import db as _db
 import service
 
 TESTDB = 'test_project.db'

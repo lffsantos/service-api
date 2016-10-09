@@ -2,7 +2,7 @@ import copy
 import pytest
 
 from datetime import date
-from service import Education, Visa, OccupationArea, Technology, Course, Member
+from service.members.models import Education, Visa, OccupationArea, Technology, Course, Member
 from test import gen
 
 
