@@ -1,3 +1,4 @@
+from flask.ext.validator import ValidateString
 from service import db
 
 
@@ -7,6 +8,9 @@ class Education(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     level = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='education', lazy='dynamic')
+
+    def __init__(self, level):
+        self.level = level
 
     @property
     def serialize(self):
@@ -18,6 +22,10 @@ class Education(db.Model):
     def __repr__(self):
         return self.level
 
+    @classmethod
+    def __declare_last__(cls):
+        ValidateString(Education.level, False, True)
+
 
 class Course(db.Model):
     __tablename__ = 'course'
@@ -25,6 +33,9 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='course', lazy='dynamic')
+
+    def __init__(self, name):
+        self.name = name
 
     @property
     def serialize(self):
@@ -45,6 +56,10 @@ class Visa(db.Model):
     description = db.Column(db.Text)
     members = db.relationship('Member', backref='visa', lazy='dynamic')
 
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
     @property
     def serialize(self):
         return {
@@ -64,6 +79,9 @@ class OccupationArea(db.Model):
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='occupation_area', lazy='dynamic')
 
+    def __init__(self, name):
+        self.name = name
+
     @property
     def serialize(self):
         return {
@@ -80,6 +98,9 @@ class Technology(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
 
     @property
     def serialize(self):

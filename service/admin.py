@@ -2,7 +2,7 @@ from flask.ext.admin.contrib import sqlamodel
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin import Admin
 from service import app, db
-from service.members.models import Member, Education, Visa, OccupationArea, Technology, Course, MemberAdmin
+from service.members.models import Member, Education, Visa, OccupationArea, Technology, Course
 
 
 class MemberAdmin(sqlamodel.ModelView):
