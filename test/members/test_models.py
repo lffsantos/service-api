@@ -3,6 +3,7 @@ import pytest
 
 from datetime import date
 from service.members.models import Education, Visa, OccupationArea, Technology, Course, Member
+from sqlalchemy_utils import Choice
 from test import gen
 
 
@@ -59,12 +60,11 @@ def test_save_member(session, test_case):
         del database['members']
     gen.insert_database(session, database)
     member = Member(
-        full_name='Lucas Farias', gender=1, short_name='Lucas', birth=date.today(),
+        full_name='Lucas Farias', gender='1', short_name='Lucas', birth=date.today(),
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
-        occupation_area_id=1
+        occupation_area_id=1, experience_time='0'
     )
     session.add(member)
-    session.commit()
     for tech in database['technologies']:
         member.technologies.append(tech)
     session.commit()
@@ -74,7 +74,10 @@ def test_save_member(session, test_case):
         if key == 'technologies':
             assert all([r.name in value for r in result.technologies])
         else:
-            assert result.__dict__[key] == value
+            if isinstance(result.__dict__[key], Choice):
+                assert result.__dict__[key].code == value
+            else:
+                assert result.__dict__[key] == value
 
 
 @pytest.mark.parametrize('test_case', [gen.fake_data()])

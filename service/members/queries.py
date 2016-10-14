@@ -49,3 +49,11 @@ def add_aux_model(cls, *args):
     session.add(instance)
     session.commit()
     return instance
+
+
+def get_aux_model_by_id(cls, id_model):
+    return cls.query.get(id_model)
+
+
+def get_all(cls):
+    return cls.query.all()

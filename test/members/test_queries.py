@@ -8,14 +8,14 @@ from test import gen
 @pytest.mark.parametrize('test_case', [
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '', '',
-                 1, 1, 1, 1, 1, [1, 2, 3], True),
+        'args': ('1', 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '', '',
+                 '1', 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': False,
     },
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '', '',
-                 1, 1, 1, 1, 1, [1, 2, 3], True),
+        'args': ('1', 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '', '',
+                 '1', 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': ValueError,
     }
 ])

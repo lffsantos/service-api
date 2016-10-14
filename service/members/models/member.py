@@ -19,18 +19,22 @@ class Member(db.Model):
     __tablename__ = 'member'
 
     GENDER = [
-        (1, u'Male'),
-        (2, u'Female')
+        ('1', u'Male'),
+        ('2', u'Female')
     ]
     EXPERIENCE_TIME = [
-        (1, u'Sem experiência'),
-        (2, u' < 1 ano'),
-        (3, u' 1 - 2 anos'),
-        (4, u' 2 - 4 anos')
+        ('0', u'----'),
+        ('1', u'no experience'),
+        ('2', u' < 1 year'),
+        ('3', u' 1 - 2 years'),
+        ('4', u' 2 - 4 years'),
+        ('5', u' 4 - 6 years'),
+        ('6', u' 6 - 8 years'),
+        ('7', u' > 8 years'),
     ]
 
     id = db.Column(db.Integer, primary_key=True)
-    gender = db.Column(ChoiceType(GENDER, impl=db.Integer()), nullable=False)
+    gender = db.Column(ChoiceType(GENDER, impl=db.String()), nullable=False)
     full_name = db.Column(db.String, unique=True, nullable=False)
     short_name = db.Column(db.String)
     birth = db.Column(db.Date)
@@ -41,7 +45,7 @@ class Member(db.Model):
     linkedin = db.Column(db.String)
     github = db.Column(db.String)
     phone = db.Column(db.String)
-    experience_time = db.Column(ChoiceType(EXPERIENCE_TIME, impl=db.Integer()))
+    experience_time = db.Column(ChoiceType(EXPERIENCE_TIME, impl=db.String()), default='0')
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
     visa_id = db.Column(db.Integer, db.ForeignKey('visa.id'))
@@ -59,17 +63,17 @@ class Member(db.Model):
         """
         return [tech.serialize for tech in self.technologies]
 
-    @classmethod
-    def __declare_last__(cls):
-        ValidateString(Member.full_name, False, True)
-        ValidateString(Member.short_name, True, True)
-        ValidateInteger(Member.gender, False, True)
-        ValidateInteger(Member.experience_time, True, True)
-        ValidateInteger(Member.education_id, True, True)
-        ValidateInteger(Member.course_id, True, True)
-        ValidateInteger(Member.visa_id, True, True)
-        ValidateInteger(Member.occupation_area_id, True, True)
-        ValidateEmail(Member.email, allow_null=False, throw_exception=True)
+    # @classmethod
+    # def __declare_last__(cls):
+    #     ValidateString(Member.full_name, False, True)
+    #     ValidateString(Member.short_name, True, True)
+    #     ValidateInteger(Member.gender, False, True)
+    #     ValidateInteger(Member.experience_time, True, True)
+    #     ValidateInteger(Member.education_id, True, True)
+    #     ValidateInteger(Member.course_id, True, True)
+    #     ValidateInteger(Member.visa_id, True, True)
+    #     ValidateInteger(Member.occupation_area_id, True, True)
+    #     ValidateEmail(Member.email, allow_null=False, throw_exception=True)
 
     def age(self):
         return time.gmtime()[0] - self.birth.year

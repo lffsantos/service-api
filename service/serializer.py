@@ -1,5 +1,5 @@
 from flask.json import JSONEncoder
-from service.members.models import Member
+from service.members.models import Member, Education, Visa, Course, Technology, OccupationArea
 
 
 def dump_datetime(value):
@@ -13,7 +13,7 @@ def dump_choice(value):
     """Deserialize Choide object into string form for JSON processing."""
     if value is None:
         return None
-    return value.value
+    return value.code
 
 
 class MyJSONEncoder(JSONEncoder):
@@ -39,5 +39,8 @@ class MyJSONEncoder(JSONEncoder):
                 'technologies': obj.serialize_technologies,
                 'is_working': obj.is_working,
             }
+        if isinstance(obj, Education) or isinstance(obj, Visa) or isinstance(obj, Course) \
+                or isinstance(obj, Technology) or isinstance(obj, OccupationArea):
+            return obj.serialize
 
         return super(MyJSONEncoder, self).default(obj)
