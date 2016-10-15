@@ -1,15 +1,7 @@
 import json
 import re
-from flask import url_for
 import pytest
-import service
-
-
-@pytest.fixture
-def app():
-    service.app.config['SERVER_NAME'] = "TEST_SERVER"
-    service.app.config['TESTING'] = True
-    return service.app
+from flask import url_for
 
 
 @pytest.mark.parametrize('test_case', [
