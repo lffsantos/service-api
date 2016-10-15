@@ -1,21 +1,22 @@
 import copy
 import pytest
-from service.members.models import Member, Education, Course, Visa, OccupationArea, Technology, ExperienceTime, Gender
+
 from service.members.queries import add_member, add_aux_model
+from service.members.models import *
 from test import gen
 
 
 @pytest.mark.parametrize('test_case', [
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '', '',
-                 1, 1, 1, 1, 1, [1, 2, 3], True),
+        'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '',
+                 '', 1, 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': False,
     },
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '', '',
-                 1, 1, 1, 1, 1, [1, 2, 3], True),
+        'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '',
+                 '', 1, 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': ValueError,
     }
 ])

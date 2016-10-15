@@ -1,10 +1,8 @@
 import copy
 import pytest
-
 from datetime import date
-from service.members.models import(
-    Education, Visa, OccupationArea, Technology, Course, Gender, ExperienceTime, Member
-)
+
+from service.members.models import *
 from test import gen
 
 
@@ -25,7 +23,7 @@ def test_create(session, test_case):
 
 @pytest.mark.parametrize('test_case, attribute, expected', [
     (Education(level='Superior'), 'level', 'doutorado'),
-    (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4' ),
+    (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4'),
     (OccupationArea(name='Devops'), 'name', 'backend'),
     (Technology(name='Java'), 'name', 'python'),
     (Course(name='Engenharia'), 'name', 'Ciencia'),
