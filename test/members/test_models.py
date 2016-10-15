@@ -2,8 +2,9 @@ import copy
 import pytest
 
 from datetime import date
-from service.members.models import Education, Visa, OccupationArea, Technology, Course, Member
-from sqlalchemy_utils import Choice
+from service.members.models import(
+    Education, Visa, OccupationArea, Technology, Course, Gender, ExperienceTime, Member
+)
 from test import gen
 
 
@@ -12,7 +13,9 @@ from test import gen
     (Visa(name='Stamp2', description='Estudante')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),
-    (Course(name='Engenharia'))
+    (Course(name='Engenharia')),
+    (Gender(name='Male')),
+    (ExperienceTime(name='No experience')),
 ])
 def test_create(session, test_case):
     session.add(test_case)
@@ -25,7 +28,9 @@ def test_create(session, test_case):
     (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4' ),
     (OccupationArea(name='Devops'), 'name', 'backend'),
     (Technology(name='Java'), 'name', 'python'),
-    (Course(name='Engenharia'), 'name', 'Ciencia')
+    (Course(name='Engenharia'), 'name', 'Ciencia'),
+    (Gender(name='Male'), 'name', 'Female'),
+    (ExperienceTime(name='No experience'), 'name', '> 1 year'),
 ])
 def test_edit(session, test_case, attribute, expected):
     session.add(test_case)
@@ -42,7 +47,9 @@ def test_edit(session, test_case, attribute, expected):
     (Visa(name='Stamp2', description='Estudante')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),
-    (Course(name='Engenharia'))
+    (Course(name='Engenharia')),
+    (Gender(name='Male')),
+    (ExperienceTime(name='No experience')),
 ])
 def test_delete(session, test_case):
     session.add(test_case)
@@ -60,9 +67,9 @@ def test_save_member(session, test_case):
         del database['members']
     gen.insert_database(session, database)
     member = Member(
-        full_name='Lucas Farias', gender='1', short_name='Lucas', birth=date.today(),
+        full_name='Lucas Farias', gender_id=1, short_name='Lucas', birth=date.today(),
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
-        occupation_area_id=1, experience_time='0'
+        occupation_area_id=1
     )
     session.add(member)
     for tech in database['technologies']:
@@ -74,10 +81,7 @@ def test_save_member(session, test_case):
         if key == 'technologies':
             assert all([r.name in value for r in result.technologies])
         else:
-            if isinstance(result.__dict__[key], Choice):
-                assert result.__dict__[key].code == value
-            else:
-                assert result.__dict__[key] == value
+            assert result.__dict__[key] == value
 
 
 @pytest.mark.parametrize('test_case', [gen.fake_data()])

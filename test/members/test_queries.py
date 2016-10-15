@@ -1,6 +1,6 @@
 import copy
 import pytest
-from service.members.models import Member, Education, Course, Visa, OccupationArea, Technology
+from service.members.models import Member, Education, Course, Visa, OccupationArea, Technology, ExperienceTime, Gender
 from service.members.queries import add_member, add_aux_model
 from test import gen
 
@@ -8,14 +8,14 @@ from test import gen
 @pytest.mark.parametrize('test_case', [
     {
         'data': gen.fake_data(),
-        'args': ('1', 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '', '',
-                 '1', 1, 1, 1, 1, [1, 2, 3], True),
+        'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '', '',
+                 1, 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': False,
     },
     {
         'data': gen.fake_data(),
-        'args': ('1', 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '', '',
-                 '1', 1, 1, 1, 1, [1, 2, 3], True),
+        'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '', '',
+                 1, 1, 1, 1, 1, [1, 2, 3], True),
         'expected_error': ValueError,
     }
 ])
@@ -55,6 +55,16 @@ def test_add_member(session, test_case):
     {
         'cls': Technology,
         'args': {'name': 'Java'},
+        'expected_error': False,
+    },
+    {
+        'cls': Gender,
+        'args': {'name': 'Male'},
+        'expected_error': False,
+    },
+    {
+        'cls': ExperienceTime,
+        'args': {'name': 'No Experience'},
         'expected_error': False,
     },
 ])

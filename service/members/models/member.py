@@ -4,7 +4,6 @@ from flask.ext.validator import ValidateString, ValidateInteger, ValidateEmail
 
 from service import db
 from sqlalchemy.orm import backref
-from sqlalchemy_utils import ChoiceType
 
 
 member_technology = db.Table(
@@ -18,23 +17,8 @@ member_technology = db.Table(
 class Member(db.Model):
     __tablename__ = 'member'
 
-    GENDER = [
-        ('1', u'Male'),
-        ('2', u'Female')
-    ]
-    EXPERIENCE_TIME = [
-        ('0', u'----'),
-        ('1', u'no experience'),
-        ('2', u' < 1 year'),
-        ('3', u' 1 - 2 years'),
-        ('4', u' 2 - 4 years'),
-        ('5', u' 4 - 6 years'),
-        ('6', u' 6 - 8 years'),
-        ('7', u' > 8 years'),
-    ]
-
     id = db.Column(db.Integer, primary_key=True)
-    gender = db.Column(ChoiceType(GENDER, impl=db.String()), nullable=False)
+    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'), nullable=False)
     full_name = db.Column(db.String, unique=True, nullable=False)
     short_name = db.Column(db.String)
     birth = db.Column(db.Date)
@@ -45,7 +29,7 @@ class Member(db.Model):
     linkedin = db.Column(db.String)
     github = db.Column(db.String)
     phone = db.Column(db.String)
-    experience_time = db.Column(ChoiceType(EXPERIENCE_TIME, impl=db.String()), default='0')
+    experience_time_id = db.Column(db.Integer, db.ForeignKey('experience_time.id'))
     education_id = db.Column(db.Integer, db.ForeignKey('education.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
     visa_id = db.Column(db.Integer, db.ForeignKey('visa.id'))

@@ -13,8 +13,8 @@ def get_members(*args, **kwargs):
     return Member.query.all()
 
 
-def add_member(gender, full_name, short_name, birth, email, about, linkedin, github,
-               phone, experience_time, education_id, course_id, visa_id, occupation_area_id,
+def add_member(gender_id, full_name, short_name, birth, email, about, linkedin, github,
+               phone, experience_time_id, education_id, course_id, visa_id, occupation_area_id,
                technologies, is_working):
 
     session = db.session
@@ -25,9 +25,9 @@ def add_member(gender, full_name, short_name, birth, email, about, linkedin, git
         except ValueError:
             raise ValueError('invalid format for birth receive {} expected {}'.format(birth, 'ddmmyyy'))
 
-    member = Member(gender=gender, full_name=full_name, short_name=short_name, birth=birth, email=email,
+    member = Member(gender_id=gender_id, full_name=full_name, short_name=short_name, birth=birth, email=email,
                     confirmed=False, about=about, linkedin=linkedin, github=github, phone=phone,
-                    experience_time=experience_time, education_id=education_id, course_id=course_id,
+                    experience_time_id=experience_time_id, education_id=education_id, course_id=course_id,
                     visa_id=visa_id, occupation_area_id=occupation_area_id, is_working=is_working
                     )
 

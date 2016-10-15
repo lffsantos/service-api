@@ -1,6 +1,6 @@
 from datetime import date
 import pytest
-from service.members.models import Education, Course, Visa, OccupationArea, Technology, Member
+from service.members.models import Education, Course, Visa, OccupationArea, Technology, Gender, ExperienceTime, Member
 
 __author__ = 'lucas'
 
@@ -11,6 +11,10 @@ def insert_database(session, models):
         session.add(education)
     for course in models.get('courses', []):
         session.add(course)
+    for gender in models.get('genders', []):
+        session.add(gender)
+    for experience in models.get('experience_times', []):
+        session.add(experience)
     for occupations in models.get('occupations', []):
         session.add(occupations)
     for visa in models.get('visas', []):
@@ -32,19 +36,33 @@ def fake_data():
             'technologies': [
                 Technology(name='Java'), Technology(name='Python'), Technology(name='Django'), Technology(name='Flask')
             ],
+            'genders': [
+                Gender(name='Male'),
+                Gender(name='Female'),
+            ],
+            'experience_times': [
+                ExperienceTime(name='No Experience'),
+                ExperienceTime(name='< 1 year'),
+                ExperienceTime(name='1 - 2 years'),
+                ExperienceTime(name='2 - 4 years'),
+                ExperienceTime(name='4 - 6 years'),
+                ExperienceTime(name='6 - 8 years'),
+                ExperienceTime(name='8 - 10 years'),
+                ExperienceTime(name='> 10 years'),
+            ],
             'members': [
                 Member(
-                    full_name='Lucas Farias', gender='1', short_name='Lucas', birth=date.today(),
+                    full_name='Lucas Farias', gender_id=1, short_name='Lucas', birth=date.today(),
                     email='example@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
-                    occupation_area_id=1, experience_time=0
+                    occupation_area_id=1
                 )
             ]
         },
         'expected': {
-            'full_name': 'Lucas Farias', 'gender': '1', 'short_name': 'Lucas',
+            'full_name': 'Lucas Farias', 'gender_id': 1, 'short_name': 'Lucas',
             'birth': date.today(), 'email': 'example@gmail.com',
             'education_id': 1, 'course_id': 1, 'visa_id': 1, 'occupation_area_id': 1,
-            'is_working': False, 'experience_time': '0',
+            'is_working': False,
             'technologies': ['Java', 'Python', 'Django', 'Flask'],
         },
     }
@@ -93,31 +111,45 @@ def populate_database_for_members(session):
                 Technology(name='HTML'),
                 Technology(name='SQL'),
             ],
+            'genders': [
+                Gender(name='Male'),
+                Gender(name='Female'),
+            ],
+            'experience_times': [
+                ExperienceTime(name='No Experience'),
+                ExperienceTime(name='< 1 year'),
+                ExperienceTime(name='1 - 2 years'),
+                ExperienceTime(name='2 - 4 years'),
+                ExperienceTime(name='4 - 6 years'),
+                ExperienceTime(name='6 - 8 years'),
+                ExperienceTime(name='8 - 10 years'),
+                ExperienceTime(name='> 10 years'),
+            ],
             'members': [
                 Member(
-                    full_name='Lucas Farias', gender='1', short_name='Lucas', birth=date.today(), confirmed=True,
+                    full_name='Lucas Farias', gender_id=1, short_name='Lucas', birth=date.today(), confirmed=True,
                     email='example1@gmail.com', is_working=False, visa_id=1, education_id=1, course_id=1,
-                    occupation_area_id=1, linkedin='xxx', github='xxxx', about='', phone='', experience_time='1'
+                    occupation_area_id=1, linkedin='xxx', github='xxxx', about='', phone='', experience_time_id=1
                 ),
                 Member(
-                    full_name='Joana Maria', gender='2', short_name='Joana', birth=date.today(), confirmed=True,
+                    full_name='Joana Maria', gender_id=2, short_name='Joana', birth=date.today(), confirmed=True,
                     email='example2@gmail.com', is_working=False, visa_id=2, education_id=1, course_id=2,
-                    occupation_area_id=2, linkedin='', github='', about='', phone='', experience_time='2'
+                    occupation_area_id=2, linkedin='', github='', about='', phone='', experience_time_id=2
                 ),
                 Member(
-                    full_name='Jose Silva', gender='1', short_name='Jose', birth=date.today(), confirmed=False,
+                    full_name='Jose Silva', gender_id=1, short_name='Jose', birth=date.today(), confirmed=False,
                     email='example3@gmail.com', is_working=True, visa_id=1, education_id=3, course_id=1,
-                    occupation_area_id=3, linkedin='', github='', about='', phone='', experience_time='2'
+                    occupation_area_id=3, linkedin='', github='', about='', phone='', experience_time_id=3
                 ),
                 Member(
-                    full_name='João Paulo', gender='1', short_name='Joana', birth=date.today(), confirmed=True,
+                    full_name='João Paulo', gender_id=1, short_name='Joaao', birth=date.today(), confirmed=True,
                     email='example4@gmail.com', is_working=True, visa_id=1, education_id=4, course_id=3,
-                    occupation_area_id=2, linkedin='', github='', about='', phone='', experience_time='1'
+                    occupation_area_id=2, linkedin='', github='', about='', phone='', experience_time_id=2
                 ),
                 Member(
-                    full_name='Pedro Paulo', gender='1', short_name='Joana', birth=date.today(), confirmed=True,
+                    full_name='Pedro Paulo', gender_id=1, short_name='pedroa', birth=date.today(), confirmed=True,
                     email='example5@gmail.com', is_working=True, visa_id=2, education_id=2, course_id=3,
-                    occupation_area_id=1, linkedin='', github='', about='', phone='', experience_time='3'
+                    occupation_area_id=1, linkedin='', github='', about='', phone='', experience_time_id=3
                 ),
             ],
             'member_technologies': [

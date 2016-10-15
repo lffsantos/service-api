@@ -111,3 +111,45 @@ class Technology(db.Model):
 
     def __repr__(self):
         return self.name
+
+
+class Gender(db.Model):
+    __tablename__ = 'gender'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+    members = db.relationship('Member', backref='gender', lazy='dynamic')
+
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
+    def __repr__(self):
+        return self.name
+
+
+class ExperienceTime(db.Model):
+    __tablename__ = 'experience_time'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+    members = db.relationship('Member', backref='experience_time', lazy='dynamic')
+
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
+    def __repr__(self):
+        return self.name
