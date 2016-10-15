@@ -1,0 +1,3 @@
+DATABASE=sqlite:////tmp/project.db
+DEBUG=True
+SECRET_KEY=SECRET
