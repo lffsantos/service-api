@@ -18,7 +18,7 @@ class Member(db.Model):
     __tablename__ = 'member'
 
     id = db.Column(db.Integer, primary_key=True)
-    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'), nullable=False)
+    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'))
     full_name = db.Column(db.String, unique=True, nullable=False)
     short_name = db.Column(db.String)
     birth = db.Column(db.Date)

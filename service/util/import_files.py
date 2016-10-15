@@ -3,7 +3,7 @@ import logging
 
 import os
 from service import db
-from service.members.models import Course, Education, OccupationArea, Technology, Visa
+from service.members.models import Course, Education, OccupationArea, Technology, Visa, ExperienceTime, Gender
 from sqlalchemy.exc import IntegrityError
 
 
@@ -35,7 +35,9 @@ if __name__ == '__main__':
         Education: 'education.csv',
         OccupationArea: 'occupation_area.csv',
         Technology: 'technology.csv',
-        Visa: 'visa.csv'
+        Visa: 'visa.csv',
+        Gender: 'gender.csv',
+        ExperienceTime: 'experience_time.csv'
     }
     for cls, file_path in model_file.items():
         logger.info('Processing file.... "{}" '.format(file_path))

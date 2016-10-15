@@ -1,5 +1,5 @@
 from flask.json import JSONEncoder
-from service.members.models import Member, Education, Visa, Course, Technology, OccupationArea
+from service.members.models import Member, Education, Visa, Course, Technology, OccupationArea, Gender, ExperienceTime
 
 
 def dump_datetime(value):
@@ -21,7 +21,7 @@ class MyJSONEncoder(JSONEncoder):
         if isinstance(obj, Member):
             return {
                 'id': obj.id,
-                'gender': dump_choice(obj.gender),
+                'gender': obj.gender.serialize,
                 'full_name': obj.full_name,
                 'short_name': obj.short_name,
                 'birth': obj.age(),
@@ -31,7 +31,7 @@ class MyJSONEncoder(JSONEncoder):
                 'update_at': dump_datetime(obj.update_at),
                 'linkedin': obj.linkedin,
                 'phone': obj.phone,
-                'experience_time': dump_choice(obj.experience_time),
+                'experience_time': obj.experience_time.serialize,
                 'education': obj.education.serialize,
                 'course': obj.course.serialize,
                 'visa': obj.visa.serialize,
@@ -40,7 +40,8 @@ class MyJSONEncoder(JSONEncoder):
                 'is_working': obj.is_working,
             }
         if isinstance(obj, Education) or isinstance(obj, Visa) or isinstance(obj, Course) \
-                or isinstance(obj, Technology) or isinstance(obj, OccupationArea):
+                or isinstance(obj, Technology) or isinstance(obj, OccupationArea)\
+                or isinstance(obj, Gender) or isinstance(obj, ExperienceTime):
             return obj.serialize
 
         return super(MyJSONEncoder, self).default(obj)

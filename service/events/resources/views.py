@@ -1,10 +1,12 @@
 import json
 from flask import request, jsonify
-from flask.ext.restful import Resource
-from service import cache
+from flask.ext.restplus import Resource
+
+from service import cache, api_v1
 from service.events.meetup_api import MeetupApi
 
 
+@api_v1.route('/events_meetup', endpoint='events_meetup', doc=False)
 class EventsMeetup(Resource):
     @cache.cached(timeout=3600, key_prefix='events_meetup')
     def get(self):
