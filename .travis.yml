@@ -4,4 +4,6 @@ python:
 install:
   - pip install -q -r requirements.txt
 script:
-  - py.test
+  py.test --cov=service test/
+after_success:
+  coveralls
