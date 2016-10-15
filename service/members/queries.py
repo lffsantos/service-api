@@ -7,6 +7,7 @@ from service.members.models import Member, Technology
 
 def get_members(args):
     query = ()
+    filter_tech = False
     for key, values in args.items():
         values = json.loads(values)
         if key == 'ed_ids':
@@ -18,14 +19,22 @@ def get_members(args):
         elif key == 'oc_ids':
             query += (Member.occupation_area_id.in_(values), )
         elif key == 'te_ids':
-            query += (Member.technologies.in_(values), )
+            filter_tech = True
+            query += (Technology.id.in_(values), )
         elif key == 'ge_ids':
             query += (Member.gender_id.in_(values), )
         elif key == 'ex_ids':
             query += (Member.experience_time_id.in_(values), )
 
     query += (Member.confirmed==True, )
-    return list(Member.query.filter(*query).order_by(Member.full_name.asc()))
+    if filter_tech:
+        result = list(Member.query.join(Member.technologies).filter(*query).order_by(
+            Member.full_name.asc())
+        )
+    else:
+        result = list(Member.query.filter(*query).order_by(Member.full_name.asc()))
+
+    return result
 
 
 def add_member(gender_id, full_name, short_name, birth, email, about, linkedin, github,

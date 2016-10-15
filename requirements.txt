@@ -13,3 +13,5 @@ itsdangerous==0.24
 flask-validator
 flask-fixtures
 flask-restful
+coverage
+pytest-cov

@@ -1,5 +1,6 @@
 from flask.json import JSONEncoder
-from service.members.models import Member, Education, Visa, Course, Technology, OccupationArea, Gender, ExperienceTime
+
+from service.members.models import *
 
 
 def dump_datetime(value):
@@ -7,13 +8,6 @@ def dump_datetime(value):
     if value is None:
         return None
     return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
-
-
-def dump_choice(value):
-    """Deserialize Choide object into string form for JSON processing."""
-    if value is None:
-        return None
-    return value.code
 
 
 class MyJSONEncoder(JSONEncoder):

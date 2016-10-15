@@ -10,10 +10,42 @@ from test.gen import populate_database_for_members
 
 class TestMembers:
 
-    def test_list_members(self, client, populate_database_for_members):
-        response = client.get(url_for('api_v1.members'))
-        members = queries.get_members({})
-        assert response.json == jsonify({'members': members}).json
+    @pytest.mark.parametrize('test_case', [
+        {
+            'filters': {
+                'ed_ids': json.dumps([1, 2]),
+                'te_ids': json.dumps([4, 3])
+            },
+            'expected_result': 1
+        },
+        {
+            'filters': {
+                'co_ids': json.dumps([1, 2]),
+                'vi_ids': json.dumps([1])
+            },
+            'expected_result': 2
+        },
+        {
+            'filters': {
+                'oc_ids': json.dumps([1, 2]),
+                'ge_ids': json.dumps([2])
+            },
+            'expected_result': 1
+        },
+        {
+            'filters': {
+                'ex_ids': json.dumps([3, 4]),
+                'oc_ids': json.dumps([2])
+            },
+            'expected_result': 0
+        },
+    ])
+    def test_list_members(self, client, test_case, populate_database_for_members):
+        response = client.get(
+            url_for('api_v1.members'), query_string=test_case['filters']
+        )
+        members = queries.get_members(test_case['filters'])
+        assert len(response.json['members']) == len(members)
         assert response.status_code == 200
 
 
