@@ -1,9 +1,9 @@
 from flask import request, jsonify
 from flask.ext.restplus import Resource
+
 from service import api_v1
 from service.members import queries
 from service.members.models import Education, Visa, Course, OccupationArea, Technology
-from service.members.queries import add_aux_model, get_members, add_member
 
 
 class GenericAuxModelList(Resource):
@@ -21,39 +21,32 @@ class GenericAuxModelViewItem(Resource):
         result = queries.get_aux_model_by_id(self.cls, obj_id)
         return jsonify(result.serialize) if result else None
 
-    def put(self, obj_id):
-        pass
-
-    def delete(self, obj_id):
-        pass
+    # def put(self, obj_id):
+    #     pass
+    #
+    # def delete(self, obj_id):
+    #     pass
 
     def post(self):
         payload = request.get_json()
         args = payload.get('args')
-        add_aux_model(self.cls, args)
+        queries.add_aux_model(self.cls, args)
         return jsonify({'ok': 'ok'})
 
 
+@api_v1.route('/members/', endpoint='members')
 class MemberList(Resource):
     def get(self):
-        # payload = request.get_json()
-        return jsonify({'members': get_members()})
-
-    def post(self):
-        payload = request.get_json()
-        args = payload.get('args')
-        member = add_member(**args)
-        return jsonify(member)
+        payload = request.args
+        return jsonify({'members':  queries.get_members(payload)})
 
 
+@api_v1.route('/members/<int:obj_id>', endpoint='member')
 class MemberItem(Resource):
     def get(self, obj_id):
         pass
 
     def put(self, obj_id):
-        pass
-
-    def delete(self, obj_id):
         pass
 
 

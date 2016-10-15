@@ -47,6 +47,13 @@ class Course(db.Model):
     def __repr__(self):
         return self.name
 
+    @staticmethod
+    def query_filter(filter):
+        if isinstance(filter, list):
+            return (Course.id__in(filter))
+        else:
+            return (Course.id == filter)
+
 
 class Visa(db.Model):
     __tablename__ = 'visa'
