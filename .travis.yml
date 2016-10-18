@@ -9,7 +9,9 @@ before_script:
 
 install:
   - cp contrib/env-sample .env
+  - apt-get build-dep python-psycopg2
   - pip install -q -r requirements.txt
+  - pip install psycopg2
 script:
   - py.test --cov=service test/
 after_success:
