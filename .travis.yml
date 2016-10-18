@@ -5,7 +5,7 @@ services:
   - postgresql
 
 before_script:
-  - psql -c 'create database itindublin;' -U postgres
+  - psql -c 'create database itindublin_test;' -U postgres
 
 install:
   - cp contrib/env-sample .env
