@@ -1,8 +1,48 @@
-from flask.ext.validator import ValidateString
+import re
 from service import db
+from service.members.exceptions import InvalidValueError, AuxModelAlreadyExists
+from sqlalchemy.exc import IntegrityError
 
 
-class Education(db.Model):
+def _verify_type(field_name, value, expected_type):
+    if not isinstance(value, expected_type):
+        raise InvalidValueError(field_name, value, expected_type.__name__)
+
+
+class BaseModel(db.Model):
+    __abstract__ = True
+
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
+    def __repr__(self):
+        return self.name
+
+    def save_or_update(self):
+        _verify_type('name', self.name, str)
+        db.session.add(self)
+        try:
+            db.session.commit()
+            return self
+        except IntegrityError as e:
+            db.session.rollback()
+            m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
+            key, value = m.group(1), m.group(2)
+            raise AuxModelAlreadyExists(self.__class__.__name__, key, value)
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+class Education(BaseModel):
     __tablename__ = 'education'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -22,33 +62,28 @@ class Education(db.Model):
     def __repr__(self):
         return self.level
 
-    @classmethod
-    def __declare_last__(cls):
-        ValidateString(Education.level, False, True)
+    def save_or_update(self):
+        _verify_type('level', self.level, str)
+        db.session.add(self)
+        try:
+            db.session.commit()
+            return self
+        except IntegrityError as e:
+            db.session.rollback()
+            m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
+            key, value = m.group(1), m.group(2)
+            raise AuxModelAlreadyExists(self.__class__.__name__, key, value)
 
 
-class Course(db.Model):
+class Course(BaseModel):
     __tablename__ = 'course'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='course', lazy='dynamic')
 
-    def __init__(self, name):
-        self.name = name
 
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
-
-    def __repr__(self):
-        return self.name
-
-
-class Visa(db.Model):
+class Visa(BaseModel):
     __tablename__ = 'visa'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -68,32 +103,16 @@ class Visa(db.Model):
             'description': self.description,
         }
 
-    def __repr__(self):
-        return self.name
 
-
-class OccupationArea(db.Model):
+class OccupationArea(BaseModel):
     __tablename__ = 'occupation_area'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='occupation_area', lazy='dynamic')
 
-    def __init__(self, name):
-        self.name = name
 
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
-
-    def __repr__(self):
-        return self.name
-
-
-class Technology(db.Model):
+class Technology(BaseModel):
     __tablename__ = 'technology'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -102,54 +121,18 @@ class Technology(db.Model):
     def __init__(self, name):
         self.name = name
 
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
 
-    def __repr__(self):
-        return self.name
-
-
-class Gender(db.Model):
+class Gender(BaseModel):
     __tablename__ = 'gender'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='gender', lazy='dynamic')
 
-    def __init__(self, name):
-        self.name = name
 
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
-
-    def __repr__(self):
-        return self.name
-
-
-class ExperienceTime(db.Model):
+class ExperienceTime(BaseModel):
     __tablename__ = 'experience_time'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='experience_time', lazy='dynamic')
-
-    def __init__(self, name):
-        self.name = name
-
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
-
-    def __repr__(self):
-        return self.name

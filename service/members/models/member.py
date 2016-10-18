@@ -1,8 +1,10 @@
+import re
 import time
 from datetime import datetime
-from flask.ext.validator import ValidateString, ValidateInteger, ValidateEmail
-
 from service import db
+from service.members.models import Technology
+from service.members.exceptions import InvalidValueError, MemberAlreadyExists
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import backref
 
 
@@ -12,6 +14,14 @@ member_technology = db.Table(
     db.Column('technology_id', db.Integer, db.ForeignKey('technology.id')),
     db.PrimaryKeyConstraint('member_id', 'technology_id')
 )
+
+
+def _verify_type(field_name, value, expected_type, can_be_none=False):
+    if can_be_none:
+        return
+
+    if not isinstance(value, expected_type):
+        raise InvalidValueError(field_name, value, expected_type.__name__)
 
 
 class Member(db.Model):
@@ -47,20 +57,39 @@ class Member(db.Model):
         """
         return [tech.serialize for tech in self.technologies]
 
-    # @classmethod
-    # def __declare_last__(cls):
-    #     ValidateString(Member.full_name, False, True)
-    #     ValidateString(Member.short_name, True, True)
-    #     ValidateInteger(Member.gender, False, True)
-    #     ValidateInteger(Member.experience_time, True, True)
-    #     ValidateInteger(Member.education_id, True, True)
-    #     ValidateInteger(Member.course_id, True, True)
-    #     ValidateInteger(Member.visa_id, True, True)
-    #     ValidateInteger(Member.occupation_area_id, True, True)
-    #     ValidateEmail(Member.email, allow_null=False, throw_exception=True)
-
     def age(self):
         return time.gmtime()[0] - self.birth.year
 
     def __repr__(self):
         return self.full_name
+
+    def save_or_update(self, technologies=None):
+        _verify_type('full_name', self.full_name, str)
+        _verify_type('short)name', self.short_name, str, True)
+        _verify_type('email', self.email, str)
+        _verify_type('linkedin', self.linkedin, str, True)
+        _verify_type('github', self.github, str, True)
+        _verify_type('phone', self.phone, str, True)
+        _verify_type('gender_id', self.gender_id, int)
+        _verify_type('experience_time_id', self.experience_time_id, int)
+        _verify_type('education_id', self.education_id, int)
+        _verify_type('visa_id', self.visa_id, int)
+        _verify_type('course_id', self.course_id, int)
+        _verify_type('occupation_area_id', self.occupation_area_id, int)
+        _verify_type('birth', self.birth, str)
+        try:
+            self.birth = datetime.strptime(self.birth, '%d%m%Y')
+        except ValueError:
+            raise InvalidValueError(Member.__name__, self.birth, 'ddmmyyyy')
+
+        db.session.add(self)
+        try:
+            if technologies:
+                for tech in Technology.query.filter(Technology.id.in_(technologies)):
+                    self.technologies.append(tech)
+            db.session.commit()
+            return self
+        except IntegrityError as e:
+            m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
+            key, value = m.group(1), m.group(2)
+            raise MemberAlreadyExists(key, value)

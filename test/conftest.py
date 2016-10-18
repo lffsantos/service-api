@@ -1,10 +1,11 @@
-import os
 import pytest
 import service
 
-TESTDB = 'test_project.db'
-TESTDB_PATH = "/tmp/{}".format(TESTDB)
-TEST_DATABASE_URI = 'sqlite:////tmp/test_project.db'
+from decouple import config
+from flask.ext.mail import Mail
+
+
+TEST_DATABASE_URI = config('DATABASE') + '_test'
 
 
 @pytest.fixture(scope='function')
@@ -26,12 +27,11 @@ def app(request):
 @pytest.fixture(scope='function')
 def db(app, request):
     """Session-wide test database."""
-    if os.path.exists(TESTDB_PATH):
-        os.unlink(TESTDB_PATH)
+
+    service.db.drop_all()
 
     def teardown():
         service.db.drop_all()
-        os.unlink(TESTDB_PATH)
 
     service.db.app = app
     service.db.create_all()
@@ -52,9 +52,18 @@ def session(db, request):
     db.session = session
 
     def teardown():
+        session.rollback()
         transaction.rollback()
         connection.close()
         session.remove()
 
     request.addfinalizer(teardown)
     return session
+
+
+@pytest.yield_fixture
+def mail():
+    service.app.config['TESTING'] = True
+    with service.app.app_context():
+        service.mail = Mail(service.app)
+        yield service.mail

@@ -1,8 +1,14 @@
-from flask import request, jsonify
+import datetime
+import json
+import re
+
+from flask import request, jsonify, flash
 from flask.ext.restplus import Resource
 
-from service import api_v1
+from service import api_v1, db
+from service.email import confirm_token
 from service.members import queries
+from service.members.exceptions import InvalidArgument, AuxModelAlreadyExists
 from service.members.models import *
 
 
@@ -13,7 +19,6 @@ class GenericAuxModelList(Resource):
         result = queries.get_all(self.cls)
         return jsonify({self.cls.__name__: result})
 
-    @api_v1.response(201, 'Item successfully created.')
     def post(self):
         payload = request.get_json()
         result = queries.add_aux_model(self.cls, payload)
@@ -25,7 +30,7 @@ class GenericAuxModelViewItem(Resource):
 
     def get(self, obj_id):
         result = queries.get_aux_model_by_id(self.cls, obj_id)
-        return jsonify(result.serialize) if result else None
+        return jsonify(result.serialize)
 
 
 @api_v1.route('/members/', endpoint='members')
@@ -33,6 +38,18 @@ class MemberList(Resource):
     def get(self):
         payload = request.args
         return jsonify({'members':  queries.get_members(payload)})
+
+    @api_v1.response(201, 'Item successfully created.')
+    def post(self):
+        payload = request.get_json()
+        try:
+            result = queries.add_member(**payload)
+        except TypeError as error:
+            m = re.search(r"'(?:(.+?))'", error.args[0])
+            value = m.group(1)
+            raise InvalidArgument(Member.__name__, value)
+
+        return json.loads(jsonify(result).response[0]), 201
 
 
 @api_v1.route('/members/<int:obj_id>', endpoint='member')
@@ -112,3 +129,23 @@ class ExperienceTimeList(GenericAuxModelList):
 @api_v1.route('/experiences/<int:obj_id>', endpoint='experience')
 class ExperienceTimeItem(GenericAuxModelViewItem):
     cls = ExperienceTime
+
+
+@api_v1.route('/confirm/<token>', endpoint='confirm_email')
+class ConfirmEmail(Resource):
+    def get(self, token):
+        try:
+            email = confirm_token(token)
+        except:
+            flash('The confirmation link is invalid or has expired.', 'danger')
+        member = Member.query.filter_by(email=email).first_or_404()
+        if member.confirmed:
+            flash('Account already confirmed. Thank you!.', 'success')
+        else:
+            member.confirmed = True
+            member.update_at = datetime.datetime.now()
+            db.session.add(member)
+            db.session.commit()
+            flash('You have confirmed your account. Thanks!', 'success')
+
+        return jsonify({'ok': 'ok'})
