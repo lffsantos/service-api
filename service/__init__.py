@@ -17,8 +17,11 @@ app.config['ERROR_404_HELP'] = False
 from service.serializer import MyJSONEncoder
 app.json_encoder = MyJSONEncoder
 
+DEBUG = config('DEBUG', default=False, cast=bool)
 blueprint = Blueprint('api_v1', __name__, template_folder='../templates')
-api_v1 = Api(blueprint, prefix="/api/v1")
+api_v1 = Api(blueprint, prefix="/api/v1", )
+if not DEBUG:
+    api_v1._doc = False
 
 from service.events.resources.views import *
 from service.members.resources.views import *
@@ -32,7 +35,7 @@ cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 def make_flask_mail():
     app.config['MAIL_SERVER'] = config("MAIL_SERVER")
     app.config['MAIL_PORT'] = config("MAIL_PORT")
-    app.config['MAIL_USE_SSL'] = config("MAIL_USE_SSL")
+    app.config['MAIL_USE_SSL'] = config('MAIL_USE_SSL', default=False, cast=bool)
     app.config['MAIL_USERNAME'] = config("MAIL_USERNAME")
     app.config['MAIL_PASSWORD'] = config("MAIL_PASSWORD")
     return Mail(app)
