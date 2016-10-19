@@ -24,6 +24,13 @@ def _verify_type(field_name, value, expected_type, can_be_none=False):
         raise InvalidValueError(field_name, value, expected_type.__name__)
 
 
+def dump_datetime(value):
+    """Deserialize datetime object into string form for JSON processing."""
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
+
 class Member(db.Model):
     __tablename__ = 'member'
 
@@ -60,8 +67,37 @@ class Member(db.Model):
     def age(self):
         return time.gmtime()[0] - self.birth.year
 
-    def __repr__(self):
-        return self.full_name
+    def avatar(self):
+        if self.github:
+            username = self.github.split('/')
+            return 'https://avatars.githubusercontent.com/{}'.format(username[-1])
+        return None
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'gender': self.gender.serialize,
+            'full_name': self.full_name,
+            'short_name': self.short_name,
+            'birth': dump_datetime(self.birth),
+            'age': self.age(),
+            'avatar': self.avatar(),
+            'email': self.email,
+            'about': self.about,
+            'confirmed': self.confirmed,
+            'update_at': dump_datetime(self.update_at),
+            'linkedin': self.linkedin,
+            'phone': self.phone,
+            'experience_time': self.experience_time.serialize,
+            'education': self.education.serialize,
+            'course': self.course.serialize,
+            'visa': self.visa.serialize,
+            'occupation_area': self.occupation_area.serialize,
+            'technologies': self.serialize_technologies,
+            'is_working': self.is_working,
+        }
+
 
     def save_or_update(self, technologies=None):
         _verify_type('full_name', self.full_name, str)
@@ -90,6 +126,10 @@ class Member(db.Model):
             db.session.commit()
             return self
         except IntegrityError as e:
+            db.session.rollback()
             m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
             key, value = m.group(1), m.group(2)
             raise MemberAlreadyExists(key, value)
+
+    def __repr__(self):
+        return self.full_name

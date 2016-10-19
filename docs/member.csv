@@ -1,0 +1,2 @@
+gender_id,full_name,short_name,birth,email,about,confirmed,linkedin,github,phone,experience_time_id,education_id,course_id,visa_id,occupation_area_id,technologies,is_working
+1, Lucas Farias Ferreira Santos, Lucas Farias,23031987, lffsantos@gmail.com, ,true, https://www.linkedin.com/in/lucasfariassantos, https://github.com/lffsantos/,,3,1,9,4,4,"[1,2,3,4,5,6,7,8,9]",false

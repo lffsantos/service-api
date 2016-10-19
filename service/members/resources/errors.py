@@ -26,8 +26,7 @@ def handle_auxmodel_already_exist(error):
 def handle_member_not_found(error):
     msg = {
         'error': 'MemberNotFound',
-        'field_key': error.key,
-        'field_value': error.value
+        'email': error.email
     }
     return msg, 404
 
@@ -50,6 +49,7 @@ def handle_invalid_value_error(error):
         'field_value': error.field_value
     }
     return msg, 400
+
 
 @api_v1.errorhandler(exc.InvalidArgument)
 def handle_invalid_argument(error):

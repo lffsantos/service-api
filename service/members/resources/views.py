@@ -8,7 +8,7 @@ from flask.ext.restplus import Resource
 from service import api_v1, db
 from service.email import confirm_token
 from service.members import queries
-from service.members.exceptions import InvalidArgument, AuxModelAlreadyExists
+from service.members.exceptions import InvalidArgument, MemberNotFound
 from service.members.models import *
 
 
@@ -33,10 +33,24 @@ class GenericAuxModelViewItem(Resource):
         return jsonify(result.serialize)
 
 
+@api_v1.errorhandler(MemberNotFound)
+def handle_member_not_found(error):
+    msg = {
+        'error': 'MemberNotFound',
+        'field_key': error.key,
+        'field_value': error.value
+    }
+    return msg, 404
+
+
 @api_v1.route('/members/', endpoint='members')
 class MemberList(Resource):
     def get(self):
         payload = request.args
+        if payload.get('email'):
+            return jsonify(
+                {'members':  queries.get_member_by_email(payload.get('email'))}
+            )
         return jsonify({'members':  queries.get_members(payload)})
 
     @api_v1.response(201, 'Item successfully created.')

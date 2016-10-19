@@ -1,16 +1,12 @@
 import json
+
 import re
-
-from datetime import datetime
 from flask import url_for, render_template
-
-from service import db
 from service.email import send_email, generate_confirmation_token
 from service.members.exceptions import (
-    MemberAlreadyExists, AuxModelNotFound, InvalidArgument,
+    AuxModelNotFound, InvalidArgument,
     MemberNotFound)
 from service.members.models import Member, Technology
-from sqlalchemy.exc import IntegrityError
 
 
 def get_members(args):
@@ -46,8 +42,8 @@ def get_members(args):
 
 
 def add_member(gender_id, full_name, short_name, birth, email, about, linkedin, github,
-               phone, experience_time_id, education_id, course_id, visa_id, occupation_area_id,
-               technologies, is_working):
+               phone, experience_time_id, education_id, course_id, visa_id,
+               occupation_area_id, technologies, is_working):
 
     member = Member(
         gender_id=gender_id, full_name=full_name, short_name=short_name,  birth=birth,
@@ -82,7 +78,7 @@ def get_aux_model_by_id(cls, id_model):
     if result:
         return result
 
-    raise AuxModelNotFound(cls.__name__)
+    raise AuxModelNotFound(cls.__name__, 'id', id_model)
 
 
 def get_member_by_email(email):

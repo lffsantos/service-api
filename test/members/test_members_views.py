@@ -194,18 +194,19 @@ class TestAuxModels:
         assert response.json == jsonify(cls.query.get(obj_id).serialize).json
         assert response.status_code == 200
 
-    @pytest.mark.parametrize('url, id', [
-        ('api_v1.education', 1),
-        ('api_v1.visa', 1),
-        ('api_v1.occupation', 1),
-        ('api_v1.technology', 1),
-        ('api_v1.course', 1),
-        ('api_v1.gender', 1),
-        ('api_v1.experience', 1),
+    @pytest.mark.parametrize('url, id, error', [
+        ('api_v1.education', 1, 'EducationNotFound'),
+        ('api_v1.visa', 1, 'VisaNotFound'),
+        ('api_v1.occupation', 1, 'OccupationAreaNotFound'),
+        ('api_v1.technology', 1, 'TechnologyNotFound'),
+        ('api_v1.course', 1, 'CourseNotFound'),
+        ('api_v1.gender', 1, 'GenderNotFound'),
+        ('api_v1.experience', 1, 'ExperienceTimeNotFound'),
     ])
-    def test_models_handle_not_found(self, session, client, url, id):
-        with pytest.raises(AuxModelNotFound):
-            client.get(url_for(url, obj_id=id))
+    def test_models_handle_not_found(self, session, client, url, id, error):
+        response = client.get(url_for(url, obj_id=id))
+        assert response.json['error'] == error
+        assert response.status_code == 404
 
     @pytest.mark.parametrize('url, args', [
         ('api_v1.educations', {'level': 'Superior Completo'}),

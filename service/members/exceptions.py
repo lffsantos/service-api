@@ -8,8 +8,7 @@ class MemberAlreadyExists(Exception):
 
 
 class MemberNotFound(Exception):
-    def __init__(self, full_name=None, email=None):
-        self.full_name = full_name
+    def __init__(self, email=None):
         self.email = email
         super(MemberNotFound, self).__init__()
 
@@ -23,8 +22,9 @@ class AuxModelAlreadyExists(Exception):
 
 
 class AuxModelNotFound(Exception):
-    def __init__(self, cls_name, msg=None):
-        self.msg = msg
+    def __init__(self, cls_name, key, value):
+        self.key = key
+        self.value = value
         self.cls_name = cls_name
         super(AuxModelNotFound, self).__init__()
 
