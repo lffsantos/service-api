@@ -36,27 +36,141 @@ acesse a url [http://localhost:5000](http://localhost:5000) é possível visuali
 documentação Swagger UI gerada automaticamente  
 
 
-## Serviços 
-
 ## Summary Service-API
 
 - [Service-API Structure](#service-api-structure)
 - [Events](#events)
 - [Members](#members)
-- [test](#test)
+- [Test](#Test)
 
 ### Service-API Structure
 
-service/
+service/  
+service/{name-of-service} 
+  * ex:  
+*    service/events
+	 *   model  
+	 *   views    
+*    service/members  
+	 *   model  
+	 *   views  
+        
+service/util  
+  - Módulos utilitários comuns a todos os serviços.  
 
-- Os serviços serão criados aqui  
 
-ex:
- service/events  
- service/members  
- service/<name-service>  
+##Events
+
+### EventsMeetup:  
+
+* **Route**: /events_meetup  
+* **Method**: GET  
+* **Description**: retorna os meetups recebidos por parâmetro
+* **Parameters**:  
+``` 
+{  
+     groups_meetup="['nome-do-grupo']"
+}  
+```
+* **Return**: ```{"html": "html"}, 200```   
+
+
+##Members
+
+### MemberList
  
-service/util/  
+**Route**: /members 
+  
+----  
+
+* **Method**: GET  
+    * **Description**: Retorna a lista de membros filtrando pelos parâmetros, mas se receber
+email, filtra somente pelo email.
+    * **Parameters**:  
+    ``` 
+    {   
+        co_ids=[int, int, ...] opcional
+        ed_ids=[int, int, ...] opcional
+        vi_ids=[int, int, ...] opcional
+        oc_ids=[int, int, ...] opcional
+        te_ids=[int, int, ...] opcional
+        ge_ids=[int, int, ...] opcional
+        ex_ids=[int, int, ...] opcional
+        email=<string> opcional
+    }  
+    ```
+    * **Return**: ```{"members":  [lista de membros]}, 200```   
+    * **Raises**:  
+        * [MemberNotFound]  
+   
+* **Method**: POST  
+    * **Description**: realiza o cadastro de um novo membro no grupo.
+    * **Parameters**:  
+    ``` 
+    {
+	    "gender_id": <int> 
+	    "full_name": <string> 
+	    "short_name": <string> 
+        "email": <string>
+        "experience_time_id":<int> 
+        "about":<string> optcional
+        "birth": <string> opcional
+        "phone": <string> opcional, 
+        "github":<string>  
+        "linkedin":<string>   
+        "visa_id": <int>  
+        "education_id": <int>  
+        "occupation_area_id": <int>   
+        "course_id": <int>  
+        "technologies": [int, int, ..] 
+        "is_working": (true or false or null) opcional
+    }
+    ```
+    * **Return**: ```member, 201```   
+    * **Raises**:  
+        * [InvalidArgument]    
+        * [InvalidValueError]     
+        * [MemberAlreadyExists]  
+  
+  
+### MemberItem
+ No Yet Implemented
  
-- Módulos utilitários comuns a todos os serviços.   
  
+### EducationList
+ 
+**Route**: /educations
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de tipos de Educação
+    *   **Return**: ```{"Education":  [lista de educations]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra um novo tipo de educação
+    *   **Parameters**:  
+    ``` 
+    {
+	"level": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "level": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### EducationItem
+
+**Route**: /educations/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna a educação pelo ID
+* **Return**: ```{"id": id, "level": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+  
