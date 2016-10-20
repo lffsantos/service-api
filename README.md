@@ -174,3 +174,232 @@ email, filtra somente pelo email.
 * **Raises**:  
     * [AuxModelNotFound]
   
+
+### CourseList
+ 
+**Route**: /courses
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de Cursos
+    *   **Return**: ```{"Course":  [lista de cursos]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra um novo Curso
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### CourseItem
+
+**Route**: /courses/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna  curso pelo ID
+* **Return**: ```{"id": id, "name": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+    
+
+### VisaList
+ 
+**Route**: /visas
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de Vistos
+    *   **Return**: ```{"Visa":  [lista de vistos]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra um novo Visto
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+	"description": <string> opcional
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>, "description": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### VisaItem
+
+**Route**: /visas/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna o visto pelo ID
+* **Return**: ```{"id": id, "name": <string>, "desctiption": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+
+
+### OccupationAreaList
+ 
+**Route**: /occupations
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de Ocupações
+    *   **Return**: ```{"Occupation":  [lista de ocupações]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra uma nova Ocupação
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### OccupationAreaItem
+
+**Route**: /occupations/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna a ocupação pelo ID
+* **Return**: ```{"id": id, "name": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+
+
+### TechnologyList
+ 
+**Route**: /technologies
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de Tecnologias
+    *   **Return**: ```{"Technologies":  [lista de tecnologias]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra uma nova Technologia
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### TechnologyItem
+
+**Route**: /technologies/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna a technologia pelo ID
+* **Return**: ```{"id": id, "name": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+
+
+### GenderList
+ 
+**Route**: /genders
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de genêros
+    *   **Return**: ```{"Gender":  [lista de gender]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra um novo Genêro
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### GenderItem
+
+**Route**: /genders/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna o genêro pelo ID
+* **Return**: ```{"id": id, "name": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+
+
+### ExperienceTimeList
+ 
+**Route**: /experiences
+
+----
+* **Method**: GET  
+    *   **Description**: Retorna a lista de tempo de experiência
+    *   **Return**: ```{"ExperienceTime":  [lista de tempo de experiencia]}, 200```   
+
+
+* **Method**: POST  
+    *   **Description**: Cadastra um novo tempo de experiência
+    *   **Parameters**:  
+    ``` 
+    {
+	"name": <string>
+    }
+    ```
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
+    *   **Raises**:  
+          * [InvalidArgument]    
+          * [InvalidValueError] 
+          * [AuxModelAlreadyExists]
+  
+
+### ExperienceTimeItem
+
+**Route**: /experiences/\<int:obj_id>
+
+----
+
+* **Method**: GET  
+* **Description**: Retorna o tempo de experiência pelo ID
+* **Return**: ```{"id": id, "name": <string>}, 200```  
+* **Raises**:  
+    * [AuxModelNotFound]
+

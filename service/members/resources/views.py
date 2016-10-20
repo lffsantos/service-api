@@ -75,7 +75,7 @@ class EducationItem(GenericAuxModelViewItem):
     cls = Education
 
 
-@api_v1.route('/visas/', endpoint='visas')
+@api_v1.route('/visas', endpoint='visas')
 class VisaList(GenericAuxModelList):
     cls = Visa
 
@@ -85,7 +85,7 @@ class VisaItem(GenericAuxModelViewItem):
     cls = Visa
 
 
-@api_v1.route('/courses/', endpoint='courses')
+@api_v1.route('/courses', endpoint='courses')
 class CourseList(GenericAuxModelList):
     cls = Course
 
@@ -95,7 +95,7 @@ class CourseItem(GenericAuxModelViewItem):
     cls = Course
 
 
-@api_v1.route('/occupations/', endpoint='occupations')
+@api_v1.route('/occupations', endpoint='occupations')
 class OccupationAreaList(GenericAuxModelList):
     cls = OccupationArea
 
@@ -105,7 +105,7 @@ class OccupationAreaItem(GenericAuxModelViewItem):
     cls = OccupationArea
 
 
-@api_v1.route('/technologies/', endpoint='technologies')
+@api_v1.route('/technologies', endpoint='technologies')
 class TechnologyList(GenericAuxModelList):
     cls = Technology
 
@@ -115,7 +115,7 @@ class TechnologyItem(GenericAuxModelViewItem):
     cls = Technology
 
 
-@api_v1.route('/genders/', endpoint='genders')
+@api_v1.route('/genders', endpoint='genders')
 class GenderList(GenericAuxModelList):
     cls = Gender
 
@@ -125,7 +125,7 @@ class GenderItem(GenericAuxModelViewItem):
     cls = Gender
 
 
-@api_v1.route('/experiences/', endpoint='experiences')
+@api_v1.route('/experiences', endpoint='experiences')
 class ExperienceTimeList(GenericAuxModelList):
     cls = ExperienceTime
 
