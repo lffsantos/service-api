@@ -1,4 +1,5 @@
 import re
+
 from service import db
 from service.members.exceptions import InvalidValueError, AuxModelAlreadyExists
 from sqlalchemy.exc import IntegrityError
@@ -46,33 +47,8 @@ class Education(BaseModel):
     __tablename__ = 'education'
 
     id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.String, unique=True, nullable=False)
+    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='education', lazy='dynamic')
-
-    def __init__(self, level):
-        self.level = level
-
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'level': self.level,
-        }
-
-    def __repr__(self):
-        return self.level
-
-    def save_or_update(self):
-        _verify_type('level', self.level, str)
-        db.session.add(self)
-        try:
-            db.session.commit()
-            return self
-        except IntegrityError as e:
-            db.session.rollback()
-            m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
-            key, value = m.group(1), m.group(2)
-            raise AuxModelAlreadyExists(self.__class__.__name__, key, value)
 
 
 class Course(BaseModel):
