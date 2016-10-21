@@ -4,9 +4,9 @@
 
 ## Summary
 
-- [Como desenvolver](#comodesenvolver)
-- [Configurando Banco de dados](#configurandobancodedados)
-- [Teste](#Teste)
+- [Como desenvolver](#como-desenvolver)
+- [Configurando Banco de dados](#configurando-banco-de-dados)
+- [Teste](#teste)
 - [Service-API Structure](#service-api-structure)
 - [Events](#events)
 - [Members](#members)
@@ -20,15 +20,14 @@
 3. Ative o virtualenv.
 4. Instale as dependências.
 5. Copie o arquivo de configuração
+  
+> git clone git@github.com:lffsantos/service-api.git service-api  
+> cd service-api  
+> python -m venv .virtualenv  
+> source .virtualenv/bin/activate  
+> pip install -r requirements.txt  
+> cp contrib/env-sample .env  
 
-```console  
-git clone git@github.com:lffsantos/service-api.git service-api  
-cd service-api  
-python -m venv .virtualenv  
-source .virtualenv/bin/activate  
-pip install -r requirements.txt  
-cp contrib/env-sample .env  
-```
 
 ## Configurando Banco de dados
 
@@ -41,31 +40,26 @@ Comando para criar banco de dados no postgres:
 
 1. Mudar para a conta do Postgres.
 
-
-    sudo su - postgres
+    > sudo su - postgres
     
 2. Rodar o comand line para iniciar o client postgres.  
 
-
-    psql  
+    > psql  
     
 
 3. Criar usuáro no banco de dados e password.
 
-
-    CREATE USER <USERNAME> WITH PASSWORD 'somepassword';  
+    > CREATE USER 'username' WITH PASSWORD 'somepassword';    
     
     
 4. Criar instância do Banco de dados principal
 
-
-    CREATE DATABASE <DATABASE-NAME> WITH OWNER <USERNAME> ENCODING 'utf-8';
+    > CREATE DATABASE 'database-name' WITH OWNER 'username' ENCODING 'utf-8';
     
     
 5. Criar instância do Banco de dados de teste
 
-
-    CREATE DATABASE <DATABASE-NAME>_test WITH OWNER <USERNAME> ENCODING 'utf-8';
+    > CREATE DATABASE 'database-name_test' WITH OWNER 'username' ENCODING 'utf-8';
     
     
 ### Criando Tabelas
@@ -78,34 +72,34 @@ Esse projeto utiliza o [Flask-Migrate](https://flask-migrate.readthedocs.io/en/l
   - `db upgrate`: executado para aplicar as mudanças no banco de dados.  
 
 
-    cd service-api  
-    source .virtualenv/bin/activate  
-    python manage.py db init  
-    python manage.py db migrate  
-    python manage.py db upgrade  
+        > cd service-api  
+        > source .virtualenv/bin/activate  
+        > python manage.py db init  
+        > python manage.py db migrate  
+        > python manage.py db upgrade  
     
     
 ## Teste
 
 1. Configure o arquivo .env  
-    - Editar a variável `DATABASE` para o database criado no tópico anterior [Configurando Banco de dados](#configurandobancodedados)   
+    - Editar a variável `DATABASE` para o database criado no tópico anterior [Configurando Banco de dados](#configurando-banco-de-dados)   
 2. Execute os testes.  
 
 
-    cd service-api   
-    source .virtualenv/bin/activate  
-    py.test  
+    > cd service-api   
+    > source .virtualenv/bin/activate  
+    > py.test  
     
 
 ## API Service
 
 Para visualizar a api basta rodar o projeto localmente
 
-```console
-cd service-api
-source .virtualenv/bin/activate
-python manage.py runserver
-```
+
+> cd service-api
+> source .virtualenv/bin/activate
+> python manage.py runserver
+
 
 acesse a url [http://localhost:5000](http://localhost:5000) é possível visualizar a 
 documentação Swagger UI gerada automaticamente  
@@ -220,7 +214,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"level": <string>
+	    "level": <string>
     }
     ```
     *   **Return**: ```{"id": id, "level": <string>}, 201```   
@@ -258,7 +252,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"name": <string>
+	    "name": <string>
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
@@ -296,8 +290,8 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"name": <string>
-	"description": <string> opcional
+        "name": <string>
+        "description": <string> opcional
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>, "description": <string>}, 201```   
@@ -335,7 +329,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"name": <string>
+	    "name": <string>
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
@@ -373,7 +367,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"name": <string>
+	    "name": <string>
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
@@ -411,7 +405,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	"name": <string>
+	    "name": <string>
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
