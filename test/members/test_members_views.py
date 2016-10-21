@@ -46,7 +46,7 @@ class TestMembers:
             url_for('api_v1.members'), query_string=test_case['filters']
         )
         members = queries.get_members(test_case['filters'])
-        assert len(response.json['members']) == len(members)
+        assert len(response.json) == len(members)
         assert response.status_code == 200
 
     @pytest.mark.parametrize('test_case', [
@@ -176,7 +176,7 @@ class TestAuxModels:
     ])
     def test_models_list(self, client, cls, url, populate_database_for_members):
         response = client.get(url_for(url))
-        assert response.json == jsonify({cls.__name__: list(cls.query.all())}).json
+        assert response.json == jsonify(cls.query.all()).json
         assert response.status_code == 200
 
     @pytest.mark.parametrize('cls, url, obj_id', [

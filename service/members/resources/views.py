@@ -17,7 +17,7 @@ class GenericAuxModelList(Resource):
 
     def get(self):
         result = queries.get_all(self.cls)
-        return jsonify({self.cls.__name__: result})
+        return jsonify(result)
 
     def post(self):
         payload = request.get_json()
@@ -39,9 +39,9 @@ class MemberList(Resource):
         payload = request.args
         if payload.get('email'):
             return jsonify(
-                {'members':  queries.get_member_by_email(payload.get('email'))}
+                queries.get_member_by_email(payload.get('email'))
             )
-        return jsonify({'members':  queries.get_members(payload)})
+        return jsonify(queries.get_members(payload))
 
     @api_v1.response(201, 'Item successfully created.')
     def post(self):
