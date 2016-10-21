@@ -410,55 +410,55 @@ email, filtra somente pelo email.
 
 ### InvalidArgument - 400
 
-``` {
-  "message": "",
-  "field_name": "<invalid_field>",
-  "error": "InvalidValueArgument"
+``` {  
+  "message": "",  
+  "field_name": "<invalid_field>",  
+  "error": "InvalidValueArgument"  
 } ```
 
 ### InvalidValueError - 400
 
-``` {
-  "field_value": <field_value>,
-  "field_name": "<field_name>",
-  "error": "InvalidValueError",
-  "message": "Invalid column '<field_name>' ; value was '<value>' but expected '<type>'"
+``` {  
+  "field_value": <field_value>,  
+  "field_name": "<field_name>",  
+  "error": "InvalidValueError",  
+  "message": "Invalid column '<field_name>' ; value was '<value>' but expected '<type>'"  
 } ```
 
 ### AuxModelAlreadyExists - 409
 
-``` {
-  "field_value": "<value>",
-  "message": "",
-  "error": "<MODEL>AlreadyExists",
-  "field_key": "<field_name>"
+``` {  
+  "field_value": "<value>",  
+  "message": "",  
+  "error": "<MODEL>AlreadyExists",  
+  "field_key": "<field_name>"  
 } ```
 
 ### AuxModelNotFound - 404
 
-``` {
-  "field_value": <value>,
-  "message": "",
-  "error": "<MODEL>NotFound",
-  "field_key": "id"
-}```
+``` {  
+  "field_value": <value>,  
+  "message": "",  
+  "error": "<MODEL>NotFound",  
+  "field_key": "id"  
+}```  
 
 ### MemberNotFound - 404
 
-``` {
-  "field_value": <value>,
-  "message": "",
-  "error": "<MODEL>NotFound",
-  "field_key": "id"
+``` {  
+  "field_value": <value>,  
+  "message": "",  
+  "error": "<MODEL>NotFound",  
+  "field_key": "id"  
 }```
 
 ### MemberAlreadyExists - 409
 
 ``` {
-  "message": "",
-  "field_key": "email",
-  "error": "MemberAlreadyExists",
-  "field_value": "<email>"
+  "message": "",    
+  "field_key": "email",    
+  "error": "MemberAlreadyExists",    
+  "field_value": "<email>"    
 }```
 
 
