@@ -19,7 +19,12 @@ class EventsMeetup(Resource):
         return jsonify({'html': card})
 
 
-# @api_v1.route('/clear_all_caches', methods=['POST'])
-def clear_all_caches():
-    cache.delete('events_meetup')
-    return jsonify({'ok': 'ok'})
+@api_v1.route('/clear_all_caches', endpoint='clear_all_caches', doc=False)
+class ClearCache(Resource):
+    def get(self):
+        cache.delete('events_meetup')
+        return jsonify({'ok': 'ok'})
+
+    def post(self):
+        cache.delete('events_meetup')
+        return jsonify({'ok': 'ok'})

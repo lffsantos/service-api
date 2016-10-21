@@ -1,3 +1,4 @@
+import json
 import re
 import time
 from datetime import datetime
@@ -87,6 +88,7 @@ class Member(db.Model):
             'about': self.about,
             'confirmed': self.confirmed,
             'update_at': dump_datetime(self.update_at),
+            'github': self.github,
             'linkedin': self.linkedin,
             'phone': self.phone,
             'experience_time': self.experience_time.serialize,
@@ -97,7 +99,6 @@ class Member(db.Model):
             'technologies': self.serialize_technologies,
             'is_working': self.is_working,
         }
-
 
     def save_or_update(self, technologies=None):
         _verify_type('full_name', self.full_name, str)
@@ -121,6 +122,7 @@ class Member(db.Model):
         db.session.add(self)
         try:
             if technologies:
+                technologies = json.loads(technologies)
                 for tech in Technology.query.filter(Technology.id.in_(technologies)):
                     self.technologies.append(tech)
             db.session.commit()

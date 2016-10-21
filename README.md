@@ -41,6 +41,7 @@ documentação Swagger UI gerada automaticamente
 - [Service-API Structure](#service-api-structure)
 - [Events](#events)
 - [Members](#members)
+    - [Exceptions](#exceptions)
 - [Test](#Test)
 
 ### Service-API Structure
@@ -89,19 +90,19 @@ email, filtra somente pelo email.
     * **Parameters**:  
     ``` 
     {   
-        co_ids=[int, int, ...] opcional
-        ed_ids=[int, int, ...] opcional
-        vi_ids=[int, int, ...] opcional
-        oc_ids=[int, int, ...] opcional
-        te_ids=[int, int, ...] opcional
-        ge_ids=[int, int, ...] opcional
-        ex_ids=[int, int, ...] opcional
+        course_ids=[int, int, ...] opcional
+        education_ids=[int, int, ...] opcional
+        visa_ids=[int, int, ...] opcional
+        occupation_ids=[int, int, ...] opcional
+        technology_ids=[int, int, ...] opcional
+        gender_ids=[int, int, ...] opcional
+        experience_ids=[int, int, ...] opcional
         email=<string> opcional
     }  
     ```
     * **Return**: ```{"members":  [lista de membros]}, 200```   
     * **Raises**:  
-        * [MemberNotFound]  
+        * [MemberNotFound](#membernotfound)  
    
 * **Method**: POST  
     * **Description**: realiza o cadastro de um novo membro no grupo.
@@ -128,9 +129,9 @@ email, filtra somente pelo email.
     ```
     * **Return**: ```member, 201```   
     * **Raises**:  
-        * [InvalidArgument]    
-        * [InvalidValueError]     
-        * [MemberAlreadyExists]  
+        * [InvalidArgument](#invalidargument)    
+        * [InvalidValueError](#invalidvalueerror)     
+        * [MemberAlreadyExists](#memberalreadyexists)  
   
   
 ### MemberItem
@@ -157,9 +158,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "level": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### EducationItem
@@ -172,7 +173,7 @@ email, filtra somente pelo email.
 * **Description**: Retorna a educação pelo ID
 * **Return**: ```{"id": id, "level": <string>}, 200```  
 * **Raises**:  
-    * [AuxModelNotFound]
+    * [AuxModelNotFound](#auxmodelnotfound)
   
 
 ### CourseList
@@ -195,9 +196,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### CourseItem
@@ -234,10 +235,10 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>, "description": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
-  
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
+          
 
 ### VisaItem
 
@@ -272,9 +273,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+        * [InvalidArgument](#invalidargument)    
+        * [InvalidValueError](#invalidvalueerror)     
+        * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### OccupationAreaItem
@@ -287,7 +288,7 @@ email, filtra somente pelo email.
 * **Description**: Retorna a ocupação pelo ID
 * **Return**: ```{"id": id, "name": <string>}, 200```  
 * **Raises**:  
-    * [AuxModelNotFound]
+    * [AuxModelNotFound](#auxmodelnotfound)
 
 
 ### TechnologyList
@@ -310,9 +311,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### TechnologyItem
@@ -325,7 +326,7 @@ email, filtra somente pelo email.
 * **Description**: Retorna a technologia pelo ID
 * **Return**: ```{"id": id, "name": <string>}, 200```  
 * **Raises**:  
-    * [AuxModelNotFound]
+    * [AuxModelNotFound](#auxnotfound)
 
 
 ### GenderList
@@ -348,9 +349,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### GenderItem
@@ -363,7 +364,7 @@ email, filtra somente pelo email.
 * **Description**: Retorna o genêro pelo ID
 * **Return**: ```{"id": id, "name": <string>}, 200```  
 * **Raises**:  
-    * [AuxModelNotFound]
+    * [AuxModelNotFound](#auxmodelnotfound)
 
 
 ### ExperienceTimeList
@@ -386,9 +387,9 @@ email, filtra somente pelo email.
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
-          * [InvalidArgument]    
-          * [InvalidValueError] 
-          * [AuxModelAlreadyExists]
+          * [InvalidArgument](#invalidargument)    
+          * [InvalidValueError](#invalidvalueerror)     
+          * [AuxModelAlreadyExists](#auxmodelalreadyexists)     
   
 
 ### ExperienceTimeItem
@@ -401,5 +402,64 @@ email, filtra somente pelo email.
 * **Description**: Retorna o tempo de experiência pelo ID
 * **Return**: ```{"id": id, "name": <string>}, 200```  
 * **Raises**:  
-    * [AuxModelNotFound]
+    * [AuxModelNotFound](#auxmodelnotfound)
+
+
+
+## Exceptions
+
+### InvalidArgument - 400
+
+``` {
+  "message": "",
+  "field_name": "<invalid_field>",
+  "error": "InvalidValueArgument"
+} ```
+
+### InvalidValueError - 400
+
+``` {
+  "field_value": <field_value>,
+  "field_name": "<field_name>",
+  "error": "InvalidValueError",
+  "message": "Invalid column '<field_name>' ; value was '<value>' but expected '<type>'"
+} ```
+
+### AuxModelAlreadyExists - 409
+
+``` {
+  "field_value": "<value>",
+  "message": "",
+  "error": "<MODEL>AlreadyExists",
+  "field_key": "<field_name>"
+} ```
+
+### AuxModelNotFound - 404
+
+``` {
+  "field_value": <value>,
+  "message": "",
+  "error": "<MODEL>NotFound",
+  "field_key": "id"
+}```
+
+### MemberNotFound - 404
+
+``` {
+  "field_value": <value>,
+  "message": "",
+  "error": "<MODEL>NotFound",
+  "field_key": "id"
+}```
+
+### MemberAlreadyExists - 409
+
+``` {
+  "message": "",
+  "field_key": "email",
+  "error": "MemberAlreadyExists",
+  "field_value": "<email>"
+}```
+
+
 
