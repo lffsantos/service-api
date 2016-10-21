@@ -4,7 +4,6 @@ import pytest
 from flask import url_for, jsonify
 
 from service.members import queries
-from service.members.exceptions import AuxModelNotFound, AuxModelAlreadyExists
 from service.members.models import *
 from test import gen
 from test.gen import populate_database_for_members
@@ -90,7 +89,7 @@ class TestMembers:
                 'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
                 'is_working': False, 'education_id': 1, 'course_id': 1, 'visa_id': 1,
                 'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
-                'occupation_area_id': 1, 'technologies': [1, 2, 3, 4],
+                'occupation_area_id': 1, 'technologies': "[1, 2, 3, 4]",
             }
         }
     ])

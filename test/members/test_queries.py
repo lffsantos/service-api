@@ -15,13 +15,13 @@ from test import gen
     {
         'data': gen.fake_data(),
         'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '',
-                 '', 1, 1, 1, 1, 1, [1, 2, 3], True),
+                 '', 1, 1, 1, 1, 1, "[1, 2, 3]", True),
         'expected_error': False,
     },
     {
         'data': gen.fake_data(),
         'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '',
-                 '', 1, 1, 1, 1, 1, [1, 2, 3], True),
+                 '', 1, 1, 1, 1, 1, "[1, 2, 3]", True),
         'expected_error': InvalidValueError,
     },
     {
@@ -31,7 +31,7 @@ from test import gen
             'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
             'is_working': False, 'education_id': 1, 'course_id': 1,
             'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
-            'occupation_area_id': 1, 'technologies': [1, 2, 3, 4],
+            'occupation_area_id': 1, 'technologies': "[1, 2, 3, 4]",
         },
         'unpack': dict,
         'expected_error': InvalidValueError,

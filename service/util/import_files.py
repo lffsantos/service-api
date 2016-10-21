@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 def _format_row_member(member, row):
     row['confirmed'] = True if row['confirmed'] == 'true' else False
     row['is_working'] = True if row['is_working'] == 'true' else False
-    row['technologies'] = json.loads(row['technologies'])
     convert_to_int = [
         'visa_id', 'gender_id', 'occupation_area_id', 'education_id',
         'course_id', 'experience_time_id'

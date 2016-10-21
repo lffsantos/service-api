@@ -2,6 +2,16 @@
 [![Coverage Status](https://coveralls.io/repos/github/lffsantos/service-api/badge.svg?branch=members)](https://coveralls.io/github/lffsantos/service-api?branch=members)
 [![Code Health](https://landscape.io/github/lffsantos/service-api/master/landscape.svg?style=flat)](https://landscape.io/github/lffsantos/service-api/master)
 
+## Summary
+
+- [Como desenvolver](#comodesenvolver)
+- [Configurando Banco de dados](#configurandobancodedados)
+- [Teste](#Teste)
+- [Service-API Structure](#service-api-structure)
+- [Events](#events)
+- [Members](#members)
+    - [Exceptions](#exceptions)
+
 
 ## Como desenvolver?
 
@@ -9,18 +19,83 @@
 2. crie um virtualenv com Python 3.5.
 3. Ative o virtualenv.
 4. Instale as dependências.
-5. Configure a instância .env
-6. Execute os testes.
+5. Copie o arquivo de configuração
 
-```console
-git clone git@github.com:lffsantos/service-api.git service-api
-cd service-api
-python -m venv .virtualenv
-source .virtualenv/bin/activate
-pip install -r requirements.txt
-cp contrib/env-sample .env
-py.test
+```console  
+git clone git@github.com:lffsantos/service-api.git service-api  
+cd service-api  
+python -m venv .virtualenv  
+source .virtualenv/bin/activate  
+pip install -r requirements.txt  
+cp contrib/env-sample .env  
 ```
+
+## Configurando Banco de dados
+
+### Criando DB
+
+Esse projeto utiliza o banco de dados Postgresql:      
+Antes de rodar o projeto é preciso que o `database` esteja criado:  
+
+Comando para criar banco de dados no postgres:  
+
+1. Mudar para a conta do Postgres.
+
+
+    sudo su - postgres
+    
+2. Rodar o comand line para iniciar o client postgres.  
+
+
+    psql  
+    
+
+3. Criar usuáro no banco de dados e password.
+
+
+    CREATE USER <USERNAME> WITH PASSWORD 'somepassword';  
+    
+    
+4. Criar instância do Banco de dados principal
+
+
+    CREATE DATABASE <DATABASE-NAME> WITH OWNER <USERNAME> ENCODING 'utf-8';
+    
+    
+5. Criar instância do Banco de dados de teste
+
+
+    CREATE DATABASE <DATABASE-NAME>_test WITH OWNER <USERNAME> ENCODING 'utf-8';
+    
+    
+### Criando Tabelas
+
+Esse projeto utiliza o [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)  
+
+- Comandos:  
+  - `db init`: deve ser rodado uma vez somente e irá gerar a pasta `migrations`
+  - `db migrate`: executado sempre que uma mudança nos models é realizada.
+  - `db upgrate`: executado para aplicar as mudanças no banco de dados.  
+
+
+    cd service-api  
+    source .virtualenv/bin/activate  
+    python manage.py db init  
+    python manage.py db migrate  
+    python manage.py db upgrade  
+    
+    
+## Teste
+
+1. Configure o arquivo .env  
+    - Editar a variável `DATABASE` para o database criado no tópico anterior [Configurando Banco de dados](#configurandobancodedados)   
+2. Execute os testes.  
+
+
+    cd service-api   
+    source .virtualenv/bin/activate  
+    py.test  
+    
 
 ## API Service
 
@@ -35,14 +110,6 @@ python manage.py runserver
 acesse a url [http://localhost:5000](http://localhost:5000) é possível visualizar a 
 documentação Swagger UI gerada automaticamente  
 
-
-## Summary Service-API
-
-- [Service-API Structure](#service-api-structure)
-- [Events](#events)
-- [Members](#members)
-    - [Exceptions](#exceptions)
-- [Test](#Test)
 
 ### Service-API Structure
 

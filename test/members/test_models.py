@@ -99,7 +99,8 @@ def test_save_member(session, test_case):
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1,
         course_id=1, occupation_area_id=1, experience_time_id=1
     )
-    member.save_or_update([i for i in range(1, len(database['technologies'])+1)])
+    technlogies = str([i for i in range(1, len(database['technologies'])+1)])
+    member.save_or_update(technlogies)
 
     result = Member.query.all()[0]
     for key, value in test_case['expected'].items():
@@ -123,7 +124,8 @@ def test_save_member_already_exist(session, test_case):
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1,
         course_id=1, occupation_area_id=1, experience_time_id=1
     )
-    member.save_or_update([i for i in range(1, len(database['technologies'])+1)])
+    technlogies = str([i for i in range(1, len(database['technologies'])+1)])
+    member.save_or_update(technlogies)
     member_repeat = Member(
         full_name='Lucas Farias', gender_id=1, short_name='Lucas', birth='01012000',
         email='example@gmail.com', is_working=False, visa_id=1, education_id=1,
