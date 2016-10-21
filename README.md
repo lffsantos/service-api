@@ -86,9 +86,9 @@ Esse projeto utiliza o [Flask-Migrate](https://flask-migrate.readthedocs.io/en/l
 2. Execute os testes.  
 
 
-    > cd service-api   
-    > source .virtualenv/bin/activate  
-    > py.test  
+    > cd service-api     
+    > source .virtualenv/bin/activate    
+    > py.test    
     
 
 ## API Service
@@ -96,13 +96,14 @@ Esse projeto utiliza o [Flask-Migrate](https://flask-migrate.readthedocs.io/en/l
 Para visualizar a api basta rodar o projeto localmente
 
 
-> cd service-api
-> source .virtualenv/bin/activate
-> python manage.py runserver
+> cd service-api  
+> source .virtualenv/bin/activate  
+> python manage.py runserver  
 
 
 acesse a url [http://localhost:5000](http://localhost:5000) é possível visualizar a 
-documentação Swagger UI gerada automaticamente  
+documentação Swagger UI gerada automaticamente, a documentação somente será exibita se 
+a variável DEBUG=True  
 
 
 ### Service-API Structure
