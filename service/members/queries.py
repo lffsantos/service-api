@@ -1,11 +1,12 @@
 import json
+from email_validator import validate_email
 import re
 
 from flask import url_for, render_template
-from service.email import send_email, generate_confirmation_token
+from service.email import send_email, generate_confirmation_token, is_email_address_valid
 from service.members.exceptions import (
-    AuxModelNotFound, InvalidArgument, MemberNotFound
-)
+    AuxModelNotFound, InvalidArgument, MemberNotFound,
+    InvalidValueError)
 from service.members.models import Member, Technology
 
 
@@ -42,6 +43,14 @@ def get_members(args):
 
 
 def add_member(args):
+    email = args.get('email')
+    if not email or not is_email_address_valid(email):
+        raise InvalidValueError('email', email, None, reason='invalid email')
+    full_name = args.get('full_name')
+    if not full_name:
+        raise InvalidValueError('full_name', full_name, None, reason='can not be None')
+    elif len(full_name) < 5:
+        raise InvalidValueError('full_name', full_name, None, reason='too short')
 
     member = Member()
     technologies = args.pop('technologies', None)

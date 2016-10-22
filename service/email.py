@@ -1,6 +1,7 @@
 from decouple import config
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
+from email_validator import validate_email, EmailNotValidError, EmailSyntaxError
 
 
 def generate_confirmation_token(email):
@@ -32,3 +33,12 @@ def send_email(to, subject, template):
     # TRiCK TO PASS ON TRAVIS
     if not config('DEBUG'):
         mail.send(msg)
+
+
+def is_email_address_valid(email):
+    try:
+        validate_email(email)
+        return True
+    except EmailNotValidError or EmailSyntaxError:
+        return False
+

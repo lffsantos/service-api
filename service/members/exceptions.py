@@ -38,15 +38,20 @@ class EmailValidationFailed(Exception):
 
 
 class InvalidValueError(Exception):
-    def __init__(self, field_name, field_value, expected_type):
+    def __init__(self, field_name, field_value, expected_type, reason=None):
         self.field_name = field_name
         self.field_value = field_value
         self.expected = expected_type
-        super(InvalidValueError, self).__init__(
-            "Invalid column '{}' ; value was '{}' but expected '{}'".format(
+        self.reason = reason
+        if reason:
+            msg = "Invalid %s, %s; value was %s" % (
+                self.field_name, self.reason, self.field_value
+            )
+        else:
+            msg = "Invalid column '{}' ; value was '{}' but expected '{}'".format(
                 self.field_name, repr(self.field_value), self.expected
             )
-        )
+        super(InvalidValueError, self).__init__(msg)
 
 
 class InvalidConstraint(Exception):

@@ -4,8 +4,9 @@ import pytest
 from service.members.exceptions import (
     InvalidArgument, InvalidValueError, AuxModelNotFound, MemberNotFound
 )
-from service.members.queries import add_member, add_aux_model, get_aux_model_by_id, \
-    get_member_by_email
+from service.members.queries import (
+    add_member, add_aux_model, get_aux_model_by_id, get_member_by_email
+)
 from service.members.models import *
 
 from test import gen
@@ -56,9 +57,31 @@ from test import gen
         'expected_error': False,
     },
     {
+        # full_name: short
         'data': gen.fake_data(),
         'args': {
-            'invalid_field': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'full_name': 'Te', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+            'is_working': False, 'phone': '111', 'linkedin': '', 'github': '',
+        },
+        'expected_error': InvalidValueError,
+    },
+    {
+        # invalid email
+        'data': gen.fake_data(),
+        'args': {
+            'full_name': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '01012010', 'email': 'example@invalud', 'about': '',
+            'is_working': False, 'phone': '111', 'linkedin': '', 'github': '',
+        },
+        'expected_error': InvalidValueError,
+    },
+    {
+        # invalid field
+        'data': gen.fake_data(),
+        'args': {
+            'invaid_field': 'teste', 'full_name': 'Teste', 'gender_id': 1,
+            'short_name': 'Lucas', 'visa_id': 1,
             'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
             'is_working': False, 'phone': '111', 'linkedin': '', 'github': '',
         },

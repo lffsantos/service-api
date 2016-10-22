@@ -1,14 +1,17 @@
 import json
 import re
 import time
+
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import backref
+
 from service import db
 from service.members.models import Technology
 from service.members.exceptions import (
     InvalidValueError, MemberAlreadyExists, InvalidConstraint,
-    InvalidArgument)
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import backref
+    InvalidArgument
+)
 
 
 member_technology = db.Table(
