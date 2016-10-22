@@ -31,8 +31,8 @@ def fake_data():
     return {
         'database': {
             'educations': [
-                Education(level='Superior Completo'),
-                Education(level='Superior Incompleto')
+                Education(name='Superior Completo'),
+                Education(name='Superior Incompleto')
             ],
             'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
             'visas': [
@@ -84,10 +84,10 @@ def populate_database_for_members(session):
     data = {
         'database': {
             'educations': [
-                Education(level='Superior Completo'),
-                Education(level='Superior Incompleto'),
-                Education(level='Pos Grad'),
-                Education(level='no grad'),
+                Education(name='Superior Completo'),
+                Education(name='Superior Incompleto'),
+                Education(name='Pos Grad'),
+                Education(name='no grad'),
             ],
             'courses': [
                 Course(name='Engenharia de Computação'),

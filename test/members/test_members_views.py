@@ -53,8 +53,8 @@ class TestMembers:
         {
             'database': {
                 'educations': [
-                    Education(level='Superior Completo'),
-                    Education(level='Superior Incompleto')
+                    Education(name='Superior Completo'),
+                    Education(name='Superior Incompleto')
                 ],
                 'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
                 'visas': [
@@ -106,7 +106,7 @@ class TestMembers:
         {
             'database': {
                 'educations': [
-                    Education(level='Superior Completo'),
+                    Education(name='Superior Completo'),
                 ],
                 'courses': [Course(name='Engenharia')],
                 'visas': [
@@ -208,7 +208,7 @@ class TestAuxModels:
         assert response.status_code == 404
 
     @pytest.mark.parametrize('url, args', [
-        ('api_v1.educations', {'level': 'Superior Completo'}),
+        ('api_v1.educations', {'name': 'Superior Completo'}),
         ('api_v1.visas', {'name': 'Stamp2', 'description': 'aaa'}),
         ('api_v1.occupations', {'name': 'Backend'}),
         ('api_v1.technologies', {'name': 'Java'}),

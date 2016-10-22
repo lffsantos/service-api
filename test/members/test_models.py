@@ -10,7 +10,7 @@ from test import gen
 
 
 @pytest.mark.parametrize('test_case', [
-    (Education(level='Superior')),
+    (Education(name='Superior')),
     (Visa(name='Stamp2', description='Estudante')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),
@@ -24,7 +24,7 @@ def test_save(session, test_case):
 
 
 @pytest.mark.parametrize('cls, args', [
-    (Education, {'level': 'superior'}),
+    (Education, {'name': 'superior'}),
     (Visa, {'name': 'Stamp2', 'description': 'Estudante'}),
     (OccupationArea, {'name': 'Devops'}),
     (Technology, {'name': 'Java'}),
@@ -41,7 +41,7 @@ def test_save_exist_value(session, cls, args):
 
 
 @pytest.mark.parametrize('cls, args', [
-    (Education, {'level': 1}),
+    (Education, {'name': 1}),
     (Visa, {'name': 2.5, 'description': 'Estudante'}),
     (OccupationArea, {'name': 34}),
     (Technology, {'name': 1}),
@@ -56,7 +56,7 @@ def test_save_invalid_value_error(session, cls, args):
 
 
 @pytest.mark.parametrize('test_case, attribute, expected', [
-    (Education(level='Superior'), 'level', 'doutorado'),
+    (Education(name='Superior'), 'name', 'doutorado'),
     (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4'),
     (OccupationArea(name='Devops'), 'name', 'backend'),
     (Technology(name='Java'), 'name', 'python'),
@@ -73,7 +73,7 @@ def test_edit(session, test_case, attribute, expected):
 
 
 @pytest.mark.parametrize('test_case', [
-    (Education(level='Superior')),
+    (Education(name='Superior')),
     (Visa(name='Stamp2', description='Estudante')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),

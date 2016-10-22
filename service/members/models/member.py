@@ -4,7 +4,9 @@ import time
 from datetime import datetime
 from service import db
 from service.members.models import Technology
-from service.members.exceptions import InvalidValueError, MemberAlreadyExists
+from service.members.exceptions import (
+    InvalidValueError, MemberAlreadyExists, InvalidConstraint,
+    InvalidArgument)
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import backref
 
@@ -100,24 +102,26 @@ class Member(db.Model):
             'is_working': self.is_working,
         }
 
+    def fill_member(self, args):
+        fields = ['gender_id', 'full_name', 'short_name', 'birth', 'email', 'confirmed',
+                  'about', 'linkedin', 'github', 'phone', 'experience_time_id',
+                  'course_id', 'education_id', 'visa_id', 'occupation_area_id',
+                  'is_working']
+
+        for key, value in args.items():
+            if key not in fields:
+                raise InvalidArgument(Member, key)
+            setattr(self, key, value)
+        self.validate()
+        return self
+
     def save_or_update(self, technologies=None):
-        _verify_type('full_name', self.full_name, str)
-        _verify_type('short)name', self.short_name, str, True)
-        _verify_type('email', self.email, str)
-        _verify_type('linkedin', self.linkedin, str, True)
-        _verify_type('github', self.github, str, True)
-        _verify_type('phone', self.phone, str, True)
-        _verify_type('gender_id', self.gender_id, int)
-        _verify_type('experience_time_id', self.experience_time_id, int)
-        _verify_type('education_id', self.education_id, int)
-        _verify_type('visa_id', self.visa_id, int)
-        _verify_type('course_id', self.course_id, int)
-        _verify_type('occupation_area_id', self.occupation_area_id, int)
-        _verify_type('birth', self.birth, str)
-        try:
-            self.birth = datetime.strptime(self.birth, '%d%m%Y')
-        except ValueError:
-            raise InvalidValueError(Member.__name__, self.birth, 'ddmmyyyy')
+        self.validate()
+        if isinstance(self.birth, str):
+            try:
+                self.birth = datetime.strptime(self.birth, '%d%m%Y')
+            except ValueError:
+                raise InvalidValueError('birth', self.birth, 'ddmmyyyy')
 
         db.session.add(self)
         try:
@@ -131,7 +135,26 @@ class Member(db.Model):
             db.session.rollback()
             m = re.search(r"\((?:(.*?))\)=\((?:(.*?))\)", e.args[0].split('\n')[1])
             key, value = m.group(1), m.group(2)
-            raise MemberAlreadyExists(key, value)
+            regexp = re.compile(r'violates foreign key')
+            if regexp.search(e.args[0]) is not None:
+                raise InvalidConstraint(key, value)
+            else:
+                raise MemberAlreadyExists(key, value)
+
+    def validate(self):
+        _verify_type('full_name', self.full_name, str)
+        _verify_type('short_name', self.short_name, str, True)
+        _verify_type('email', self.email, str)
+        _verify_type('linkedin', self.linkedin, str, True)
+        _verify_type('github', self.github, str, True)
+        _verify_type('phone', self.phone, str, True)
+        _verify_type('gender_id', self.gender_id, int)
+        _verify_type('experience_time_id', self.experience_time_id, int, True)
+        _verify_type('education_id', self.education_id, int, True)
+        _verify_type('visa_id', self.visa_id, int, True)
+        _verify_type('course_id', self.course_id, int, True)
+        _verify_type('occupation_area_id', self.occupation_area_id, int, True)
+        _verify_type('birth', self.birth, str)
 
     def __repr__(self):
         return self.full_name

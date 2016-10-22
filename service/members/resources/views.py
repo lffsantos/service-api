@@ -46,8 +46,10 @@ class MemberList(Resource):
     @api_v1.response(201, 'Item successfully created.')
     def post(self):
         payload = request.get_json()
+        if not payload:
+            return {'error': 'no send data'}, 500
         try:
-            result = queries.add_member(**payload)
+            result = queries.add_member(payload)
         except TypeError as error:
             m = re.search(r"'(?:(.+?))'", error.args[0])
             value = m.group(1)

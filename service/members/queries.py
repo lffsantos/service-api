@@ -1,11 +1,11 @@
 import json
-
 import re
+
 from flask import url_for, render_template
 from service.email import send_email, generate_confirmation_token
 from service.members.exceptions import (
-    AuxModelNotFound, InvalidArgument,
-    MemberNotFound)
+    AuxModelNotFound, InvalidArgument, MemberNotFound
+)
 from service.members.models import Member, Technology
 
 
@@ -41,18 +41,11 @@ def get_members(args):
     return result
 
 
-def add_member(gender_id, full_name, short_name, birth, email, about, linkedin, github,
-               phone, experience_time_id, education_id, course_id, visa_id,
-               occupation_area_id, technologies, is_working):
+def add_member(args):
 
-    member = Member(
-        gender_id=gender_id, full_name=full_name, short_name=short_name,  birth=birth,
-        email=email, confirmed=False, about=about, phone=phone, linkedin=linkedin,
-        github=github, course_id=course_id,  visa_id=visa_id, education_id=education_id,
-        experience_time_id=experience_time_id, is_working=is_working,
-        occupation_area_id=occupation_area_id
-    )
-
+    member = Member()
+    technologies = args.pop('technologies', None)
+    member.fill_member(args)
     member.save_or_update(technologies)
 
     token = generate_confirmation_token(member.email)

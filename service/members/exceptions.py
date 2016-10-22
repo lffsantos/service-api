@@ -49,6 +49,13 @@ class InvalidValueError(Exception):
         )
 
 
+class InvalidConstraint(Exception):
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        super(InvalidConstraint, self).__init__()
+
+
 class InvalidArgument(Exception):
     def __init__(self, cls_name, field_name):
         self.field_name = field_name

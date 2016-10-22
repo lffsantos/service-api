@@ -159,10 +159,10 @@ email, filtra somente pelo email.
         technology_ids=[int, int, ...] opcional
         gender_ids=[int, int, ...] opcional
         experience_ids=[int, int, ...] opcional
-        email=<string> opcional
+        email=<string> opcional  
     }  
     ```
-    * **Return**: ```{"members":  [lista de membros]}, 200```   
+    * **Return**: ```{[lista de membros]}, 200```   
     * **Raises**:  
         * [MemberNotFound](#membernotfound)  
    
@@ -173,18 +173,18 @@ email, filtra somente pelo email.
     {
 	    "gender_id": <int> 
 	    "full_name": <string> 
-	    "short_name": <string> 
-        "email": <string>
-        "experience_time_id":<int> 
-        "about":<string> optcional
-        "birth": <string> opcional
+	    "short_name": <string>   
+        "email": <string>  
+        "experience_time_id":<int> opctional  
+        "about":<string> opcional  
+        "birth": <string> (ddmmyyyy)  
         "phone": <string> opcional, 
-        "github":<string>  
-        "linkedin":<string>   
+        "github":<string>  opcional  
+        "linkedin":<string> opcional  
         "visa_id": <int>  
-        "education_id": <int>  
-        "occupation_area_id": <int>   
-        "course_id": <int>  
+        "education_id": <int> opcional
+        "occupation_area_id": <int> opcional
+        "course_id": <int> opcional
         "technologies": [int, int, ..] 
         "is_working": (true or false or null) opcional
     }
@@ -218,7 +218,7 @@ email, filtra somente pelo email.
 	    "level": <string>
     }
     ```
-    *   **Return**: ```{"id": id, "level": <string>}, 201```   
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
           * [InvalidArgument](#invalidargument)    
           * [InvalidValueError](#invalidvalueerror)     
@@ -233,7 +233,7 @@ email, filtra somente pelo email.
 
 * **Method**: GET  
 * **Description**: Retorna a educação pelo ID
-* **Return**: ```{"id": id, "level": <string>}, 200```  
+* **Return**: ```{"id": id, "name": <string>}, 200```  
 * **Raises**:  
     * [AuxModelNotFound](#auxmodelnotfound)
   
@@ -245,7 +245,7 @@ email, filtra somente pelo email.
 ----
 * **Method**: GET  
     *   **Description**: Retorna a lista de Cursos
-    *   **Return**: ```{"Course":  [lista de cursos]}, 200```   
+    *   **Return**: ```{"Course":  [lista de cursos]}, 200```     
 
 
 * **Method**: POST  

@@ -14,14 +14,24 @@ from test import gen
 @pytest.mark.parametrize('test_case', [
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '01101987', 'test@gmail.com', '',  '',  '',
-                 '', 1, 1, 1, 1, 1, "[1, 2, 3]", True),
+        'args': {
+            'full_name': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+            'is_working': False, 'education_id': 1, 'course_id': 1,
+            'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
+            'occupation_area_id': 1, 'technologies': "[1, 2, 3, 4]",
+        },
         'expected_error': False,
     },
     {
         'data': gen.fake_data(),
-        'args': (1, 'lucas farias', 'lucas', '1111111111', 'test@gmail.com', '',  '',  '',
-                 '', 1, 1, 1, 1, 1, "[1, 2, 3]", True),
+        'args': {
+            'full_name': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '111111111', 'email': 'example@gmail.com', 'about': '',
+            'is_working': False, 'education_id': 1, 'course_id': 1,
+            'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
+            'occupation_area_id': 1, 'technologies': "[1, 2, 3, 4]",
+        },
         'expected_error': InvalidValueError,
     },
     {
@@ -35,7 +45,25 @@ from test import gen
         },
         'unpack': dict,
         'expected_error': InvalidValueError,
-    }
+    },
+    {
+        'data': gen.fake_data(),
+        'args': {
+            'full_name': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+            'is_working': False, 'phone': '111', 'linkedin': '', 'github': '',
+        },
+        'expected_error': False,
+    },
+    {
+        'data': gen.fake_data(),
+        'args': {
+            'invalid_field': 'Teste', 'gender_id': 1, 'short_name': 'Lucas', 'visa_id': 1,
+            'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+            'is_working': False, 'phone': '111', 'linkedin': '', 'github': '',
+        },
+        'expected_error': InvalidArgument,
+    },
 ])
 def test_add_member(session, test_case):
     database = copy.deepcopy(test_case['data']['database'])
@@ -43,19 +71,16 @@ def test_add_member(session, test_case):
     gen.insert_database(session, database)
     if test_case['expected_error']:
         with pytest.raises(test_case['expected_error']):
-            if test_case.get('unpack') is dict:
-                add_member(**test_case['args'])
-            else:
-                add_member(*test_case['args'])
+            add_member(test_case['args'])
     else:
-        member = add_member(*test_case['args'])
+        member = add_member(test_case['args'])
         assert Member.query.get(member.id)
 
 
 @pytest.mark.parametrize('test_case', [
     {
         'cls': Education,
-        'args': {'level': 'superior'},
+        'args': {'name': 'superior'},
         'expected_error': False,
     },
     {
@@ -96,7 +121,7 @@ def test_add_aux_models(session, test_case):
 
 
 @pytest.mark.parametrize('cls, args', [
-    (Education, {'level': 'teste', 'sds': 'teste'}),
+    (Education, {'name': 'teste', 'sds': 'teste'}),
     (Visa, {'name2': 'stamp2', 'description': 'Estudante'}),
     (OccupationArea, {'nadsds': 'devops'}),
     (Technology, {'namdsdds': 'java'}),

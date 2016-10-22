@@ -28,7 +28,9 @@ from service.members.resources.views import *
 
 app.register_blueprint(blueprint)
 
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+cors = CORS(blueprint, resources={r"/api/v1/*": {"origins": "*"}})
+
 
 
 ## initialize flask-mail
