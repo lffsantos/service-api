@@ -51,21 +51,21 @@ def handle_invalid_value_error(error):
     return msg, 400
 
 
-@api_v1.errorhandler(exc.MemberAlreadyExists)
-def handle_invalid_constraint(error):
-    msg = {
-        'error': 'InvalidConstraint',
-        'field_key': error.key,
-        'field_value': error.value
-    }
-    return msg, 400
-
-
 @api_v1.errorhandler(exc.InvalidArgument)
 def handle_invalid_argument(error):
     msg = {
         'error': 'InvalidValueArgument',
         'field_name': error.field_name
+    }
+    return msg, 400
+
+
+@api_v1.errorhandler(exc.InvalidKeyConstraint)
+def handle_invalid_constraint(error):
+    msg = {
+        'error': 'InvalidKeyConstraint',
+        'field_name': error.key,
+        'field_value': error.value
     }
     return msg, 400
 

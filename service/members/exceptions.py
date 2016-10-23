@@ -29,14 +29,6 @@ class AuxModelNotFound(Exception):
         super(AuxModelNotFound, self).__init__()
 
 
-class EmailValidationFailed(Exception):
-    def __init__(self, email):
-        self.email = email
-        super(EmailValidationFailed, self).__init__(
-            "Failed to validate email %s" % (self.email,)
-        )
-
-
 class InvalidValueError(Exception):
     def __init__(self, field_name, field_value, expected_type, reason=None):
         self.field_name = field_name
@@ -54,11 +46,11 @@ class InvalidValueError(Exception):
         super(InvalidValueError, self).__init__(msg)
 
 
-class InvalidConstraint(Exception):
+class InvalidKeyConstraint(Exception):
     def __init__(self, key, value):
         self.key = key
         self.value = value
-        super(InvalidConstraint, self).__init__()
+        super(InvalidKeyConstraint, self).__init__()
 
 
 class InvalidArgument(Exception):

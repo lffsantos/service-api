@@ -10,7 +10,6 @@ from test.gen import populate_database_for_members
 
 
 class TestMembers:
-
     @pytest.mark.parametrize('test_case', [
         {
             'filters': {
@@ -142,12 +141,12 @@ class TestMembers:
     @pytest.mark.parametrize('test_case, payload', [
         (gen.fake_data(),
          {
-            'full_name': 'Teste', 'gender_id': 'a', 'short_name': 'Lucas', 'visa_id': 1,
-            'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
-            'is_working': False, 'education_id': 1, 'course_id': 1,
-            'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
-            'occupation_area_id': 1, 'technologies': [1, 2, 3, 4],
-        }
+             'full_name': 'Teste', 'gender_id': 'a', 'short_name': 'Lucas', 'visa_id': 1,
+             'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+             'is_working': False, 'education_id': 1, 'course_id': 1,
+             'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
+             'occupation_area_id': 1, 'technologies': [1, 2, 3, 4],
+         }
         )
     ])
     def test_add_member_invalid_value(self, client, session, test_case, payload):
@@ -162,9 +161,76 @@ class TestMembers:
         )
         assert response.status_code == 400
 
+    @pytest.mark.parametrize('url, email, error', [
+        ('api_v1.members', {'email': 'email@email.com'}, 'MemberNotFound'),
+    ])
+    def test_member_handle_not_found(self, session, client, url, email, error):
+        response = client.get(
+            url_for(url), query_string=email
+        )
+        assert response.json['error'] == error
+        assert response.status_code == 404
+
+    @pytest.mark.parametrize('test_case', [
+        {
+            'database': {
+                'educations': [
+                    Education(name='Superior Completo'),
+                ],
+                'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
+                'visas': [
+                    Visa(name='Stamp2', description='Estudante'),
+                ],
+                'occupations': [
+                    OccupationArea(name='Devops'),
+                ],
+                'technologies': [
+                    Technology(name='Java'), Technology(name='Python'),
+                ],
+                'genders': [
+                    Gender(name='Male'),
+                ],
+                'experience_times': [
+                    ExperienceTime(name='No Experience'),
+                ],
+            },
+            'member': {
+                'full_name': 'Teste', 'gender_id': 1, 'short_name': 'Lucas',
+                'birth': '01012010', 'email': 'example@gmail.com', 'about': '',
+                'is_working': False, 'education_id': 1, 'course_id': 1, 'visa_id': 1,
+                'experience_time_id': 1, 'phone': '111', 'linkedin': '', 'github': '',
+                'occupation_area_id': 1, 'technologies': "[1, 2, 3, 4]",
+            }
+        }
+    ])
+    def test_member_handler_already_exist_and_invalid_key_constraint(self, client, session, test_case):
+        gen.insert_database(session, test_case['database'])
+        data = test_case['member']
+        response = client.post(
+            url_for('api_v1.members'), data=json.dumps(data),
+            content_type='application/json'
+        )
+        assert response.status_code == 201
+        response = client.post(
+            url_for('api_v1.members'), data=json.dumps(data),
+            content_type='application/json'
+        )
+        assert response.json['error'] == 'MemberAlreadyExists'
+        assert response.status_code == 409
+
+        # invalid 'education_id' change email and full_name
+        data['email'] = 'new_email@gmail.com'
+        data['full_name'] = 'new_name'
+        data['education_id'] = 0
+        response = client.post(
+            url_for('api_v1.members'), data=json.dumps(data),
+            content_type='application/json'
+        )
+        assert response.json['error'] == 'InvalidKeyConstraint'
+        assert response.status_code == 400
+
 
 class TestAuxModels:
-
     @pytest.mark.parametrize('cls, url', [
         (Education, 'api_v1.educations'),
         (Visa, 'api_v1.visas'),
@@ -188,7 +254,8 @@ class TestAuxModels:
         (Gender, 'api_v1.gender', 1),
         (ExperienceTime, 'api_v1.experience', 1),
     ])
-    def test_models_get_item(self, client, cls, url, obj_id, populate_database_for_members):
+    def test_models_get_item(self, client, cls, url, obj_id,
+                             populate_database_for_members):
         response = client.get(url_for(url, obj_id=obj_id))
         assert response.json == jsonify(cls.query.get(obj_id).serialize).json
         assert response.status_code == 200

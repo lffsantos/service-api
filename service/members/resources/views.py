@@ -43,17 +43,13 @@ class MemberList(Resource):
             )
         return jsonify(queries.get_members(payload))
 
-    @api_v1.response(201, 'Item successfully created.')
+    # @api_v1.response(201, 'Item successfully created.')
     def post(self):
         payload = request.get_json()
         if not payload:
             return {'error': 'no send data'}, 500
-        try:
-            result = queries.add_member(payload)
-        except TypeError as error:
-            m = re.search(r"'(?:(.+?))'", error.args[0])
-            value = m.group(1)
-            raise InvalidArgument(Member.__name__, value)
+
+        result = queries.add_member(payload)
 
         return json.loads(jsonify(result).response[0]), 201
 

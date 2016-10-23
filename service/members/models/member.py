@@ -9,8 +9,7 @@ from sqlalchemy.orm import backref
 from service import db
 from service.members.models import Technology
 from service.members.exceptions import (
-    InvalidValueError, MemberAlreadyExists, InvalidConstraint,
-    InvalidArgument
+    InvalidValueError, MemberAlreadyExists, InvalidKeyConstraint, InvalidArgument
 )
 
 
@@ -96,11 +95,11 @@ class Member(db.Model):
             'github': self.github,
             'linkedin': self.linkedin,
             'phone': self.phone,
-            'experience_time': self.experience_time.serialize,
-            'education': self.education.serialize,
-            'course': self.course.serialize,
-            'visa': self.visa.serialize,
-            'occupation_area': self.occupation_area.serialize,
+            'experience_time': self.experience_time.serialize if self.experience_time else None,
+            'education': self.education.serialize if self.education else None,
+            'course': self.course.serialize if self.course else None,
+            'visa': self.visa.serialize if self.visa else None,
+            'occupation_area': self.occupation_area.serialize if self.occupation_area else None,
             'technologies': self.serialize_technologies,
             'is_working': self.is_working,
         }
@@ -140,7 +139,7 @@ class Member(db.Model):
             key, value = m.group(1), m.group(2)
             regexp = re.compile(r'violates foreign key')
             if regexp.search(e.args[0]) is not None:
-                raise InvalidConstraint(key, value)
+                raise InvalidKeyConstraint(key, value)
             else:
                 raise MemberAlreadyExists(key, value)
 
