@@ -113,7 +113,7 @@ def test_add_member(session, test_case):
     },
     {
         'cls': Visa,
-        'args': {'name': 'Stamp2', 'description': 'estudante'},
+        'args': {'name': 'Stamp2'},
         'expected_error': False,
     },
     {

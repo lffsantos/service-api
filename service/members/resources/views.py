@@ -1,6 +1,7 @@
 import datetime
 import json
 import re
+import flask_excel as excel
 
 from flask import request, jsonify, flash
 from flask.ext.restplus import Resource
@@ -9,7 +10,10 @@ from service import api_v1, db
 from service.email import confirm_token
 from service.members import queries
 from service.members.exceptions import InvalidArgument
+from service.members.helpers import export_members
+from service.members.helpers import members
 from service.members.models import *
+from service.members.models.aux_models import Level
 
 
 class GenericAuxModelList(Resource):
@@ -133,6 +137,16 @@ class ExperienceTimeItem(GenericAuxModelViewItem):
     cls = ExperienceTime
 
 
+@api_v1.route('/levels', endpoint='levels')
+class LevelList(GenericAuxModelList):
+    cls = Level
+
+
+@api_v1.route('/levels/<int:obj_id>', endpoint='level')
+class LevelItem(GenericAuxModelViewItem):
+    cls = Level
+
+
 @api_v1.route('/confirm/<token>', endpoint='confirm_email')
 class ConfirmEmail(Resource):
     def get(self, token):
@@ -151,3 +165,14 @@ class ConfirmEmail(Resource):
             flash('You have confirmed your account. Thanks!', 'success')
 
         return jsonify({'ok': 'ok'})
+
+
+@api_v1.route('/export', endpoint='export')
+class ExportReport(Resource):
+    def get(self):
+        data_to_export = export_members(members)
+        data = [data_to_export.headers]
+        for row in data_to_export._data:
+            data.append(row.list)
+
+        return excel.make_response_from_array(data, "xlsx",  file_name="export_data")

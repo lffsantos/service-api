@@ -5,6 +5,7 @@ from flask import url_for, jsonify
 
 from service.members import queries
 from service.members.models import *
+from service.members.models.aux_models import Level
 from test import gen
 from test.gen import populate_database_for_members
 
@@ -57,8 +58,8 @@ class TestMembers:
                 ],
                 'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
                 'visas': [
-                    Visa(name='Stamp2', description='Estudante'),
-                    Visa(name='Stamp4', description='Work')
+                    Visa(name='Stamp2'),
+                    Visa(name='Stamp4')
                 ],
                 'occupations': [
                     OccupationArea(name='Devops'),
@@ -109,7 +110,7 @@ class TestMembers:
                 ],
                 'courses': [Course(name='Engenharia')],
                 'visas': [
-                    Visa(name='Stamp2', description='Estudante'),
+                    Visa(name='Stamp2'),
                 ],
                 'occupations': [
                     OccupationArea(name='Devops'),
@@ -179,7 +180,7 @@ class TestMembers:
                 ],
                 'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
                 'visas': [
-                    Visa(name='Stamp2', description='Estudante'),
+                    Visa(name='Stamp2'),
                 ],
                 'occupations': [
                     OccupationArea(name='Devops'),
@@ -239,6 +240,7 @@ class TestAuxModels:
         (Course, 'api_v1.courses'),
         (Gender, 'api_v1.genders'),
         (ExperienceTime, 'api_v1.experiences'),
+        (Level, 'api_v1.levels'),
     ])
     def test_models_list(self, client, cls, url, populate_database_for_members):
         response = client.get(url_for(url))
@@ -253,6 +255,7 @@ class TestAuxModels:
         (Course, 'api_v1.course', 1),
         (Gender, 'api_v1.gender', 1),
         (ExperienceTime, 'api_v1.experience', 1),
+        (Level, 'api_v1.level', 1),
     ])
     def test_models_get_item(self, client, cls, url, obj_id,
                              populate_database_for_members):
@@ -268,6 +271,7 @@ class TestAuxModels:
         ('api_v1.course', 1, 'CourseNotFound'),
         ('api_v1.gender', 1, 'GenderNotFound'),
         ('api_v1.experience', 1, 'ExperienceTimeNotFound'),
+        ('api_v1.level', 1, 'LevelNotFound'),
     ])
     def test_models_handle_not_found(self, session, client, url, id, error):
         response = client.get(url_for(url, obj_id=id))
@@ -276,12 +280,13 @@ class TestAuxModels:
 
     @pytest.mark.parametrize('url, args', [
         ('api_v1.educations', {'name': 'Superior Completo'}),
-        ('api_v1.visas', {'name': 'Stamp2', 'description': 'aaa'}),
+        ('api_v1.visas', {'name': 'Stamp2'}),
         ('api_v1.occupations', {'name': 'Backend'}),
         ('api_v1.technologies', {'name': 'Java'}),
         ('api_v1.courses', {'name': 'Engenharia'}),
         ('api_v1.genders', {'name': 'Male'}),
         ('api_v1.experiences', {'name': 'No Experience'}),
+        ('api_v1.levels', {'name': 'Junior'}),
     ])
     def test_models_handle_already_exist(self, session, client, url, args):
         response = client.post(

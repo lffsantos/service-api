@@ -31,9 +31,7 @@ def _verify_type(field_name, value, expected_type, can_be_none=False):
 
 def dump_datetime(value):
     """Deserialize datetime object into string form for JSON processing."""
-    if value is None:
-        return None
-    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")] if value else None
 
 
 class Member(db.Model):
@@ -56,6 +54,7 @@ class Member(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
     visa_id = db.Column(db.Integer, db.ForeignKey('visa.id'))
     occupation_area_id = db.Column(db.Integer, db.ForeignKey('occupation_area.id'))
+    level_id = db.Column(db.Integer, db.ForeignKey('level.id'))
     technologies = db.relationship(
         'Technology', secondary=member_technology, backref=backref('members', lazy='dynamic')
     )

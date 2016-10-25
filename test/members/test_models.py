@@ -6,17 +6,19 @@ from service.members.exceptions import (
 )
 
 from service.members.models import *
+from service.members.models.aux_models import Level
 from test import gen
 
 
 @pytest.mark.parametrize('test_case', [
     (Education(name='Superior')),
-    (Visa(name='Stamp2', description='Estudante')),
+    (Visa(name='Stamp2')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),
     (Course(name='Engenharia')),
     (Gender(name='Male')),
     (ExperienceTime(name='No experience')),
+    (Level(name='Pleno')),
 ])
 def test_save(session, test_case):
     test_case.save_or_update()
@@ -25,12 +27,13 @@ def test_save(session, test_case):
 
 @pytest.mark.parametrize('cls, args', [
     (Education, {'name': 'superior'}),
-    (Visa, {'name': 'Stamp2', 'description': 'Estudante'}),
+    (Visa, {'name': 'Stamp2'}),
     (OccupationArea, {'name': 'Devops'}),
     (Technology, {'name': 'Java'}),
     (Course, {'name': 'Engenharia'}),
     (Gender, {'name': 'Male'}),
     (ExperienceTime, {'name': 'No Experience'}),
+    (Level, {'name': 'pleno'}),
 ])
 def test_save_exist_value(session, cls, args):
     instance = cls(**args)
@@ -42,12 +45,13 @@ def test_save_exist_value(session, cls, args):
 
 @pytest.mark.parametrize('cls, args', [
     (Education, {'name': 1}),
-    (Visa, {'name': 2.5, 'description': 'Estudante'}),
+    (Visa, {'name': 2.5}),
     (OccupationArea, {'name': 34}),
     (Technology, {'name': 1}),
     (Course, {'name': 333}),
     (Gender, {'name': 122}),
     (ExperienceTime, {'name': 454}),
+    (Level, {'name': 222}),
 ])
 def test_save_invalid_value_error(session, cls, args):
     with pytest.raises(InvalidValueError):
@@ -57,12 +61,13 @@ def test_save_invalid_value_error(session, cls, args):
 
 @pytest.mark.parametrize('test_case, attribute, expected', [
     (Education(name='Superior'), 'name', 'doutorado'),
-    (Visa(name='Stamp2', description='Estudante'), 'name', 'stamp4'),
+    (Visa(name='Stamp2'), 'name', 'stamp4'),
     (OccupationArea(name='Devops'), 'name', 'backend'),
     (Technology(name='Java'), 'name', 'python'),
     (Course(name='Engenharia'), 'name', 'Ciencia'),
     (Gender(name='Male'), 'name', 'Female'),
     (ExperienceTime(name='No experience'), 'name', '> 1 year'),
+    (Level(name='Senior'), 'name', 'pleno'),
 ])
 def test_edit(session, test_case, attribute, expected):
     test_case.save_or_update()
@@ -74,12 +79,13 @@ def test_edit(session, test_case, attribute, expected):
 
 @pytest.mark.parametrize('test_case', [
     (Education(name='Superior')),
-    (Visa(name='Stamp2', description='Estudante')),
+    (Visa(name='Stamp2')),
     (OccupationArea(name='Devops')),
     (Technology(name='Java')),
     (Course(name='Engenharia')),
     (Gender(name='Male')),
     (ExperienceTime(name='No experience')),
+    (Level(name='Pleno')),
 ])
 def test_delete(session, test_case):
     test_case.save_or_update()

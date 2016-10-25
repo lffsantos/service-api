@@ -13,6 +13,9 @@ def _verify_type(field_name, value, expected_type):
 class BaseModel(db.Model):
     __abstract__ = True
 
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+
     def __init__(self, name):
         self.name = name
 
@@ -46,69 +49,44 @@ class BaseModel(db.Model):
 class Education(BaseModel):
     __tablename__ = 'education'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='education', lazy='dynamic')
 
 
 class Course(BaseModel):
     __tablename__ = 'course'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='course', lazy='dynamic')
 
 
 class Visa(BaseModel):
     __tablename__ = 'visa'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
-    description = db.Column(db.Text)
     members = db.relationship('Member', backref='visa', lazy='dynamic')
-
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
-
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-        }
 
 
 class OccupationArea(BaseModel):
     __tablename__ = 'occupation_area'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='occupation_area', lazy='dynamic')
 
 
 class Technology(BaseModel):
     __tablename__ = 'technology'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
-
-    def __init__(self, name):
-        self.name = name
-
 
 class Gender(BaseModel):
     __tablename__ = 'gender'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='gender', lazy='dynamic')
 
 
 class ExperienceTime(BaseModel):
     __tablename__ = 'experience_time'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
     members = db.relationship('Member', backref='experience_time', lazy='dynamic')
+
+
+class Level(BaseModel):
+    __tablename__ = 'level'
+
+    members = db.relationship('Member', backref='level', lazy='dynamic')
