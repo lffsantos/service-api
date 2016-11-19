@@ -159,7 +159,8 @@ email, filtra somente pelo email.
         technology_ids=[int, int, ...] opcional
         gender_ids=[int, int, ...] opcional
         experience_ids=[int, int, ...] opcional
-        email=<string> opcional  
+        level_ids=[int, int, ...] opcional
+        email=<string> opcional
     }  
     ```
     * **Return**: ```{[lista de membros]}, 200```   
@@ -215,7 +216,7 @@ email, filtra somente pelo email.
     *   **Parameters**:  
     ``` 
     {
-	    "level": <string>
+	    "name": <string>
     }
     ```
     *   **Return**: ```{"id": id, "name": <string>}, 201```   
@@ -292,10 +293,9 @@ email, filtra somente pelo email.
     ``` 
     {
         "name": <string>
-        "description": <string> opcional
     }
     ```
-    *   **Return**: ```{"id": id, "name": <string>, "description": <string>}, 201```   
+    *   **Return**: ```{"id": id, "name": <string>}, 201```   
     *   **Raises**:  
           * [InvalidArgument](#invalidargument)    
           * [InvalidValueError](#invalidvalueerror)     

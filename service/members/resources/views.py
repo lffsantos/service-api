@@ -1,6 +1,5 @@
 import datetime
 import json
-import re
 import flask_excel as excel
 
 from flask import request, jsonify, flash
@@ -9,11 +8,11 @@ from flask.ext.restplus import Resource
 from service import api_v1, db
 from service.email import confirm_token
 from service.members import queries
-from service.members.exceptions import InvalidArgument
 from service.members.helpers import export_members
 from service.members.helpers import members
 from service.members.models import *
 from service.members.models.aux_models import Level
+from service.members.service_filter import filter_tree
 
 
 class GenericAuxModelList(Resource):
@@ -35,6 +34,13 @@ class GenericAuxModelViewItem(Resource):
     def get(self, obj_id):
         result = queries.get_aux_model_by_id(self.cls, obj_id)
         return jsonify(result.serialize)
+
+
+@api_v1.route('/filter_tree', endpoint='filter_tree')
+class FilterList(Resource):
+    def get(self):
+        tree = filter_tree()
+        return jsonify(tree)
 
 
 @api_v1.route('/members', endpoint='members')

@@ -1,5 +1,4 @@
 import json
-from email_validator import validate_email
 import re
 
 from flask import url_for, render_template
@@ -15,23 +14,24 @@ def get_members(args):
     filter_tech = False
     for key, values in args.items():
         values = json.loads(values)
-        if key == 'ed_ids':
-            query += (Member.education_id.in_(values), )
-        elif key == 'co_ids':
-            query += (Member.course_id.in_(values), )
-        elif key == 'vi_ids':
-            query += (Member.visa_id.in_(values), )
-        elif key == 'oc_ids':
-            query += (Member.occupation_area_id.in_(values), )
-        elif key == 'te_ids':
-            filter_tech = True
-            query += (Technology.id.in_(values), )
-        elif key == 'ge_ids':
-            query += (Member.gender_id.in_(values), )
-        elif key == 'ex_ids':
-            query += (Member.experience_time_id.in_(values), )
+        if values:
+            if key == 'education_ids':
+                query += (Member.education_id.in_(values), )
+            elif key == 'course_ids':
+                query += (Member.course_id.in_(values), )
+            elif key == 'visa_ids':
+                query += (Member.visa_id.in_(values), )
+            elif key == 'occupation_ids':
+                query += (Member.occupation_area_id.in_(values), )
+            elif key == 'technology_ids':
+                filter_tech = True
+                query += (Technology.id.in_(values), )
+            elif key == 'gender_ids':
+                query += (Member.gender_id.in_(values), )
+            elif key == 'experience_ids':
+                query += (Member.experience_time_id.in_(values), )
 
-    query += (Member.confirmed==True, )
+    query += (Member.confirmed, )
     if filter_tech:
         result = list(Member.query.join(Member.technologies).filter(*query).order_by(
             Member.full_name.asc())

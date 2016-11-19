@@ -3,7 +3,7 @@ import json
 import logging
 import os
 
-from service import db
+from service import db, Level
 from service.members.exceptions import AuxModelAlreadyExists, MemberAlreadyExists
 from service.members.models import (
     Course, Education, OccupationArea, Technology, Visa, ExperienceTime, Gender,
@@ -73,6 +73,7 @@ def run_importer():
         (Visa, 'visa.csv'),
         (Gender, 'gender.csv'),
         (ExperienceTime, 'experience_time.csv'),
+        (Level, 'level.csv'),
         (Member, 'member.csv')
     ]
     save_data = []

@@ -73,8 +73,7 @@ class Member(db.Model):
 
     def avatar(self):
         if self.github:
-            username = self.github.split('/')
-            return 'https://avatars.githubusercontent.com/{}'.format(username[-1])
+            return 'https://avatars.githubusercontent.com/{}'.format(self.github)
         return None
 
     @property
