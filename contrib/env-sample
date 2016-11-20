@@ -1,4 +1,4 @@
-DATABASE=postgresql://username:password@localhost:5432/databasename
+DATABASE=postgresql://postgres:@localhost:5432/itindublin_test
 DEBUG=True
 SECRET_KEY=SECRET
 MAIL_SERVER=localhost
