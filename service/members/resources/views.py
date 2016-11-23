@@ -1,9 +1,18 @@
-from flask import request, jsonify
+import datetime
+import json
+import flask_excel as excel
+
+from flask import request, jsonify, flash
 from flask.ext.restplus import Resource
 
-from service import api_v1
+from service import api_v1, db
+from service.email import confirm_token
 from service.members import queries
+from service.members.helpers import export_members
+from service.members.helpers import members
 from service.members.models import *
+from service.members.models.aux_models import Level
+from service.members.service_filter import filter_tree
 
 
 class GenericAuxModelList(Resource):
@@ -11,9 +20,8 @@ class GenericAuxModelList(Resource):
 
     def get(self):
         result = queries.get_all(self.cls)
-        return jsonify({self.cls.__name__: result})
+        return jsonify(result)
 
-    @api_v1.response(201, 'Item successfully created.')
     def post(self):
         payload = request.get_json()
         result = queries.add_aux_model(self.cls, payload)
@@ -25,14 +33,35 @@ class GenericAuxModelViewItem(Resource):
 
     def get(self, obj_id):
         result = queries.get_aux_model_by_id(self.cls, obj_id)
-        return jsonify(result.serialize) if result else None
+        return jsonify(result.serialize)
 
 
-@api_v1.route('/members/', endpoint='members')
+@api_v1.route('/filter_tree', endpoint='filter_tree')
+class FilterList(Resource):
+    def get(self):
+        tree = filter_tree()
+        return jsonify(tree)
+
+
+@api_v1.route('/members', endpoint='members')
 class MemberList(Resource):
     def get(self):
         payload = request.args
-        return jsonify({'members':  queries.get_members(payload)})
+        if payload.get('email'):
+            return jsonify(
+                queries.get_member_by_email(payload.get('email'))
+            )
+        return jsonify(queries.get_members(payload))
+
+    # @api_v1.response(201, 'Item successfully created.')
+    def post(self):
+        payload = request.get_json()
+        if not payload:
+            return {'error': 'no send data'}, 500
+
+        result = queries.add_member(payload)
+
+        return json.loads(jsonify(result).response[0]), 201
 
 
 @api_v1.route('/members/<int:obj_id>', endpoint='member')
@@ -44,7 +73,7 @@ class MemberItem(Resource):
         pass
 
 
-@api_v1.route('/educations/', endpoint='educations')
+@api_v1.route('/educations', endpoint='educations')
 class EducationList(GenericAuxModelList):
     cls = Education
 
@@ -54,7 +83,7 @@ class EducationItem(GenericAuxModelViewItem):
     cls = Education
 
 
-@api_v1.route('/visas/', endpoint='visas')
+@api_v1.route('/visas', endpoint='visas')
 class VisaList(GenericAuxModelList):
     cls = Visa
 
@@ -64,7 +93,7 @@ class VisaItem(GenericAuxModelViewItem):
     cls = Visa
 
 
-@api_v1.route('/courses/', endpoint='courses')
+@api_v1.route('/courses', endpoint='courses')
 class CourseList(GenericAuxModelList):
     cls = Course
 
@@ -74,7 +103,7 @@ class CourseItem(GenericAuxModelViewItem):
     cls = Course
 
 
-@api_v1.route('/occupations/', endpoint='occupations')
+@api_v1.route('/occupations', endpoint='occupations')
 class OccupationAreaList(GenericAuxModelList):
     cls = OccupationArea
 
@@ -84,7 +113,7 @@ class OccupationAreaItem(GenericAuxModelViewItem):
     cls = OccupationArea
 
 
-@api_v1.route('/technologies/', endpoint='technologies')
+@api_v1.route('/technologies', endpoint='technologies')
 class TechnologyList(GenericAuxModelList):
     cls = Technology
 
@@ -94,7 +123,7 @@ class TechnologyItem(GenericAuxModelViewItem):
     cls = Technology
 
 
-@api_v1.route('/genders/', endpoint='genders')
+@api_v1.route('/genders', endpoint='genders')
 class GenderList(GenericAuxModelList):
     cls = Gender
 
@@ -104,7 +133,7 @@ class GenderItem(GenericAuxModelViewItem):
     cls = Gender
 
 
-@api_v1.route('/experiences/', endpoint='experiences')
+@api_v1.route('/experiences', endpoint='experiences')
 class ExperienceTimeList(GenericAuxModelList):
     cls = ExperienceTime
 
@@ -112,3 +141,44 @@ class ExperienceTimeList(GenericAuxModelList):
 @api_v1.route('/experiences/<int:obj_id>', endpoint='experience')
 class ExperienceTimeItem(GenericAuxModelViewItem):
     cls = ExperienceTime
+
+
+@api_v1.route('/levels', endpoint='levels')
+class LevelList(GenericAuxModelList):
+    cls = Level
+
+
+@api_v1.route('/levels/<int:obj_id>', endpoint='level')
+class LevelItem(GenericAuxModelViewItem):
+    cls = Level
+
+
+@api_v1.route('/confirm/<token>', endpoint='confirm_email')
+class ConfirmEmail(Resource):
+    def get(self, token):
+        try:
+            email = confirm_token(token)
+        except:
+            flash('The confirmation link is invalid or has expired.', 'danger')
+        member = Member.query.filter_by(email=email).first_or_404()
+        if member.confirmed:
+            flash('Account already confirmed. Thank you!.', 'success')
+        else:
+            member.confirmed = True
+            member.update_at = datetime.datetime.now()
+            db.session.add(member)
+            db.session.commit()
+            flash('You have confirmed your account. Thanks!', 'success')
+
+        return jsonify({'ok': 'ok'})
+
+
+@api_v1.route('/export', endpoint='export')
+class ExportReport(Resource):
+    def get(self):
+        data_to_export = export_members(members)
+        data = [data_to_export.headers]
+        for row in data_to_export._data:
+            data.append(row.list)
+
+        return excel.make_response_from_array(data, "xlsx",  file_name="export_data")

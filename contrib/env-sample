@@ -1,3 +1,10 @@
-DATABASE=sqlite:////tmp/project.db
+DATABASE=postgresql://postgres:@localhost:5432/itindublin
 DEBUG=True
 SECRET_KEY=SECRET
+MAIL_SERVER=localhost
+MAIL_PORT=25
+MAIL_USE_SSL=False
+MAIL_USERNAME=
+MAIL_PASSWORD=
+SECURITY_PASSWORD_SALT=SALT
+MAIL_DEFAULT_SENDER='example@gmail.com'

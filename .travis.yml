@@ -1,10 +1,18 @@
 language: python
 python:
   - "3.5"
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database itindublin_test;' -U postgres
 install:
   - cp contrib/env-sample .env
+  - sudo apt-get build-dep python-psycopg2
   - pip install -q -r requirements.txt
+  - pip install psycopg2
 script:
-  py.test
+  - py.test --cov=service test/
 after_success:
   coveralls
+notifications:
+  email: false

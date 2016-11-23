@@ -2,6 +2,7 @@ import pytest
 from datetime import date
 
 from service.members.models import *
+from service.members.models.aux_models import Level
 
 __author__ = 'lucas'
 
@@ -16,8 +17,10 @@ def insert_database(session, models):
         session.add(gender)
     for experience in models.get('experience_times', []):
         session.add(experience)
-    for occupations in models.get('occupations', []):
-        session.add(occupations)
+    for occupation in models.get('occupations', []):
+        session.add(occupation)
+    for level in models.get('levels', []):
+        session.add(level)
     for visa in models.get('visas', []):
         session.add(visa)
     for technology in models.get('technologies', []):
@@ -31,13 +34,13 @@ def fake_data():
     return {
         'database': {
             'educations': [
-                Education(level='Superior Completo'),
-                Education(level='Superior Incompleto')
+                Education(name='Superior Completo'),
+                Education(name='Superior Incompleto')
             ],
             'courses': [Course(name='Engenharia'), Course(name='Analise de Sistema')],
             'visas': [
-                Visa(name='Stamp2', description='Estudante'),
-                Visa(name='Stamp4', description='Work')
+                Visa(name='Stamp2'),
+                Visa(name='Stamp4')
             ],
             'occupations': [
                 OccupationArea(name='Devops'),
@@ -50,6 +53,10 @@ def fake_data():
             'genders': [
                 Gender(name='Male'),
                 Gender(name='Female'),
+            ],
+            'level': [
+                Level(name='Junior'),
+                Level(name='Pleno'),
             ],
             'experience_times': [
                 ExperienceTime(name='No Experience'),
@@ -84,10 +91,10 @@ def populate_database_for_members(session):
     data = {
         'database': {
             'educations': [
-                Education(level='Superior Completo'),
-                Education(level='Superior Incompleto'),
-                Education(level='Pos Grad'),
-                Education(level='no grad'),
+                Education(name='Superior Completo'),
+                Education(name='Superior Incompleto'),
+                Education(name='Pos Grad'),
+                Education(name='no grad'),
             ],
             'courses': [
                 Course(name='Engenharia de Computação'),
@@ -96,9 +103,9 @@ def populate_database_for_members(session):
                 Course(name='Rede de Computadores'),
             ],
             'visas': [
-                Visa(name='Stamp2', description='Estudante'),
-                Visa(name='Stamp4', description='Work Permit'),
-                Visa(name='EU-Citizen', description='Passaporte Europeu'),
+                Visa(name='Stamp2'),
+                Visa(name='Stamp4'),
+                Visa(name='EU-Citizen'),
             ],
             'occupations': [
                 OccupationArea(name='Devops'),
@@ -125,6 +132,10 @@ def populate_database_for_members(session):
             'genders': [
                 Gender(name='Male'),
                 Gender(name='Female'),
+            ],
+            'levels': [
+                Level(name='Junior'),
+                Level(name='Pleno'),
             ],
             'experience_times': [
                 ExperienceTime(name='No Experience'),
