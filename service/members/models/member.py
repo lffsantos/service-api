@@ -44,7 +44,7 @@ class Member(db.Model):
     birth = db.Column(db.Date)
     email = db.Column(db.String, unique=True, nullable=False)
     about = db.Column(db.Text)
-    confirmed = db.Column(db.Boolean, default=False)
+    confirmed = db.Column(db.Boolean, default=True)
     update_at = db.Column(db.DateTime, default=datetime.now())
     linkedin = db.Column(db.String)
     github = db.Column(db.String)
